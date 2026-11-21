@@ -1,6 +1,6 @@
 @font-face {
     font-family: "WizardManse";
-    src: url("/wizard-manse.otf") format("opentype");
+    src: url("./fonts/wizard-manse.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
 }
@@ -13,8 +13,8 @@
 }
 :root {
     --shadow-df: 0 2px 
-    --cursor-default: url("/Cursor.png") 2 2, auto;
-    --cursor-point: url("/pointer.png") 12 2, pointer;
+    --cursor-default: url("./assets/Cursor.png") 2 2, auto;
+    --cursor-point: url("./assets/pointer.png") 12 2, pointer;
 }
 
 body {
