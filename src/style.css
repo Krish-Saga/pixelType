@@ -1,0 +1,77 @@
+@font-face {
+    font-family: "WizardManse";
+    src: url("/wizard-manse.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+:root {
+    --shadow-df: 0 2px 
+    --cursor-default: url("/Cursor.png") 2 2, auto;
+    --cursor-point: url("/pointer.png") 12 2, pointer;
+}
+
+body {
+    cursor: var(--cursor-default);
+    background-image: url("./assets/back4.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: "WizardManse", sans-serif;
+    font-size: 2rem;
+}
+ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    cursor: var(--cursor-point);
+    gap: 4rem;
+    margin: 1rem 2rem;
+}
+a {
+    text-align: center;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    cursor: var(--cursor-point);
+    color: black;
+}
+nav {
+    display: flex;
+}
+#navbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#title {
+    -webkit-text-stroke: 0.75px #ffffff;
+    text-decoration: underline;
+    position: absolute;
+    left: 1rem;
+    cursor: var(--cursor-point);
+    margin: 0.3rem 2rem;
+}
+main {
+    margin: 5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+}
+
+#typing-main {
+    width: 70vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    border: 2px solid black;
+}
