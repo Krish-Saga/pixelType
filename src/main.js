@@ -6,20 +6,19 @@ const engwords = english.words;
 
 function moveCursor() {
     const nextLetter = document.querySelector(".letter.current");
+    const wordEnd = document.querySelector(".word.current");
     const cursor = document.getElementById("cursor");
-    const newposition = nextLetter.getBoundingClientRect();
-    if (nextLetter) {
-        cursor.style.top = newposition.top + 2 + "px";
-        cursor.style.left = newposition.left + "px";
-    }
+    const newposition = (nextLetter || wordEnd).getBoundingClientRect();
+    cursor.style.top = newposition.top + 2 + "px";
+    cursor.style.left = newposition[nextLetter ? "left" : "right"] + "px";
 }
 
 function addClass(el, classname) {
-    el.className += " " + classname;
+    el.classList.add(classname);
 }
 
 function removeClass(el, classname) {
-    el.className = el.className.replace(classname, "");
+    el.classList.remove(classname);
 }
 
 function randWords() {
@@ -53,7 +52,9 @@ async function main() {
                     key === expected ? "correct" : "incorrect",
                 );
                 removeClass(currentLetter, "current");
-                addClass(currentLetter.nextSibling, "current");
+                if (currentLetter.nextSibling) {
+                    addClass(currentLetter.nextSibling, "current");
+                }
             } else {
                 const incorrectLetter = document.createElement("span");
                 incorrectLetter.innerHTML = key;
