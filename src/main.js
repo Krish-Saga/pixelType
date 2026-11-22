@@ -4,6 +4,16 @@ const typingMain = document.getElementById("typing-main");
 const words = document.getElementById("words");
 const engwords = english.words;
 
+function moveCursor() {
+    const nextLetter = document.querySelector(".letter.current");
+    const cursor = document.getElementById("cursor");
+    const newposition = nextLetter.getBoundingClientRect();
+    if (nextLetter) {
+        cursor.style.top = newposition.top + 2 + "px";
+        cursor.style.left = newposition.left + "px";
+    }
+}
+
 function addClass(el, classname) {
     el.className += " " + classname;
 }
@@ -26,6 +36,7 @@ async function main() {
     }
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
+    moveCursor();
 
     typingMain.addEventListener("keydown", (ev) => {
         const key = ev.key;
@@ -69,13 +80,7 @@ async function main() {
             addClass(currentWord.nextSibling.firstChild, "current");
         }
         // Moving cursor yayyyyyyyyyyyyyyyy
-        const nextLetter = document.querySelector(".letter.current");
-        const cursor = document.getElementById("cursor");
-        const newposition = nextLetter.getBoundingClientRect();
-        if (nextLetter) {
-            cursor.style.top = newposition.top + 2 + "px";
-            cursor.style.left = newposition.left + 2 + "px";
-        }
+        moveCursor();
     });
 }
 

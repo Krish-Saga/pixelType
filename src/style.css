@@ -148,7 +148,5 @@ main {
     width: 3px;
     background: var(--peach);
     position: fixed;
-    top: 290px;
-    left: 90px;
     animation: blink 1.5s infinite;
 }
