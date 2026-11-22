@@ -28,7 +28,7 @@ function randWords() {
     return `<div class="word"><span class="letter">${engwords[randIndex].split("").join('</span><span class="letter">')}</span></div>`;
 }
 function imgtoggle() {
-    document.body.style.backgroundImage = `url('/assets/back${Imgindex}.jpg')`;
+    document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back${Imgindex}.jpg')`;
     Imgindex = (Imgindex % 6) + 1;
 }
 
@@ -56,6 +56,7 @@ async function main() {
         const isLetter = key.length === 1 && key !== " ";
         const isSpace = key === " ";
         const isTab = key === "Tab";
+        const isBackspace = key === "Backspace";
         console.log({ key, expected });
         if (isTab) {
             ev.preventDefault();
@@ -99,6 +100,12 @@ async function main() {
         // Moving cursor yayyyyyyyyyyyyyyyy
         moveCursor();
     });
+
+    if (isBackspace) {
+        if (currentWord.firstChild == currentLetter) {
+            // making last word current
+        }
+    }
     document.getElementById("title").addEventListener("click", () => {
         window.location.reload();
     });
