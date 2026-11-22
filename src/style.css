@@ -4,6 +4,36 @@
     font-weight: normal;
     font-style: normal;
 }
+#timer {
+    font-size: 3rem;
+    color: red;
+    margin: 1rem;
+    position: absolute;
+    left: 2rem;
+}
+#info {
+    position: relative;
+    border: 2px solid black;
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+    justify-content: center;
+}
+#modes {
+    padding: 0 1rem;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+#seconds {
+    padding: 0 1rem;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    border: 2px solid black;
+}
 
 * {
     margin: 0;
@@ -12,7 +42,7 @@
     text-decoration: none;
 }
 :root {
-    --shadow-df: 0 2px 
+    --shadow-df: 0 2px;
     --cursor-default: url("./assets/Cursor.png") 2 2, auto;
     --cursor-point: url("./assets/pointer.png") 12 2, pointer;
 }
@@ -60,7 +90,6 @@ nav {
     margin: 0.3rem 2rem;
 }
 main {
-    margin: 5rem 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -72,6 +101,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 400px;
+    height: 40%;
     border: 2px solid black;
 }
