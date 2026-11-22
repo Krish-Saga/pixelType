@@ -97,15 +97,34 @@ async function main() {
             }
             addClass(currentWord.nextSibling.firstChild, "current");
         }
+
+        if (isBackspace) {
+            // making last word current
+            if (currentLetter && currentWord.firstChild == currentLetter) {
+                removeClass(currentWord, "current");
+                addClass(currentWord.previousSibling, "current");
+                removeClass(currentLetter, "current");
+                addClass(currentWord.previousSibling.lastChild, "current");
+                removeClass(currentWord.previousSibling.lastChild, "incorrect");
+                removeClass(currentWord.previousSibling.lastChild, "correct");
+            }
+            if (currentLetter && currentWord.firstChild != currentLetter) {
+                removeClass(currentLetter, "current");
+                addClass(currentLetter.previousSibling, "current");
+                removeClass(currentLetter.previousSibling, "correct");
+                removeClass(currentLetter.previousSibling, "incorrect");
+            }
+            if (!currentLetter) {
+                addClass(currentWord.lastChild, "current");
+                removeClass(currentWord.lastChild, "incorrect");
+                removeClass(currentWord.lastChild, "correct");
+            }
+        }
+
         // Moving cursor yayyyyyyyyyyyyyyyy
         moveCursor();
     });
 
-    if (isBackspace) {
-        if (currentWord.firstChild == currentLetter) {
-            // making last word current
-        }
-    }
     document.getElementById("title").addEventListener("click", () => {
         window.location.reload();
     });
