@@ -43,9 +43,6 @@ async function main() {
                 );
                 removeClass(currentLetter, "current");
                 addClass(currentLetter.nextSibling, "current");
-                if (currentLetter.nextSibling) {
-                    addClass(currentLetter.nextSibling, "current");
-                }
             } else {
                 const incorrectLetter = document.createElement("span");
                 incorrectLetter.innerHTML = key;
