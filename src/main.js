@@ -1,10 +1,22 @@
+import english from "./assets/english.json";
+
 const typingMain = document.getElementById("typing-main");
-async function getWords() {
-    const response = await fetch("./assets/english.json");
-    console.log("Status:", response.status);
-    console.log("Content-Type:", response.headers.get("content-type"));
-    const data = await response.json();
-    const words = data.words;
-    console.log(words);
+const words = english.words;
+
+function randWords() {
+    const randIndex = Math.ceil(Math.random() * words.length);
+    return `<div class="word"><span class="letter">${words[randIndex].split("").join('</span><span class="letter">')}</span></div>`;
 }
-getWords();
+
+async function main() {
+    typingMain.innerHTML = "";
+    let wordlength = 55;
+    for (let i = 0; i < wordlength; i++) {
+        typingMain.innerHTML += randWords();
+    }
+    typingMain.addEventListener("keyup", (ev) => {
+        console.log(ev);
+    });
+}
+
+main();

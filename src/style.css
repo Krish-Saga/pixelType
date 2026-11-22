@@ -6,12 +6,12 @@
 }
 #timer {
     font-size: 3rem;
-    color: red;
     margin: 1rem;
     position: absolute;
     left: 2rem;
 }
 #info {
+    color: var(--peach);
     position: relative;
     border: 2px solid black;
     margin-top: 3rem;
@@ -42,12 +42,24 @@
     text-decoration: none;
 }
 :root {
+    --frost: #e9eff1;
+    --rain: #c8d8df;
+    --mist: #a8b8c8;
+    --storm: #8795a7;
+    --ink: #343b49;
+
+    --blush: #e8b7b8;
+    --peach: #e5a078;
+    --amber: #e6bd7d;
+    --sage: #b5c9b9;
+    --lavender: #b7b7cb;
     --shadow-df: 0 2px;
     --cursor-default: url("./assets/Cursor.png") 2 2, auto;
     --cursor-point: url("./assets/pointer.png") 12 2, pointer;
 }
 
 body {
+    height: 100vh;
     cursor: var(--cursor-default);
     background-image: url("./assets/back4.jpg");
     background-size: cover;
@@ -55,6 +67,7 @@ body {
     background-position: center;
     font-family: "WizardManse", sans-serif;
     font-size: 2rem;
+    backdrop-filter: brightness(80%);
 }
 ul {
     list-style: none;
@@ -65,11 +78,11 @@ ul {
     margin: 1rem 2rem;
 }
 a {
+    color: var(--ink);
     text-align: center;
     padding: 0.5rem 1rem;
     border-radius: 12px;
     cursor: var(--cursor-point);
-    color: black;
 }
 nav {
     display: flex;
@@ -82,7 +95,7 @@ nav {
 }
 
 #title {
-    -webkit-text-stroke: 0.75px #ffffff;
+    color: var(--rain);
     text-decoration: underline;
     position: absolute;
     left: 1rem;
@@ -93,14 +106,21 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid black;
 }
 
 #typing-main {
-    width: 70vw;
+    margin-top: 5rem;
+    width: 80vw;
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
-    height: 40%;
-    border: 2px solid black;
+    height: 220px;
+    overflow: scroll;
+    line-height: 1.5;
+    gap: 1.3rem;
+}
+.words {
+    font-size: 2.3rem;
+    font-family: monospace;
+    color: var(--text-color);
 }
