@@ -35,6 +35,9 @@ async function main() {
     }
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
+    // Don't touch this first calculates font to place cursor in it's place
+    await document.fonts.ready;
+    //==========================================
     moveCursor();
 
     typingMain.addEventListener("keydown", (ev) => {
