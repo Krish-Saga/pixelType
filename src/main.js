@@ -34,7 +34,7 @@ function imgtoggle() {
 
 async function main() {
     typingMain.focus();
-    document.body.style.backgroundImage = `url('/assets/back5.jpg')`;
+    document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
     document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
     words.innerHTML = "";
     let wordlength = 55;
