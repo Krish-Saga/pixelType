@@ -25,9 +25,21 @@ function randWords() {
     const randIndex = Math.floor(Math.random() * engwords.length);
     return `<div class="word"><span class="letter">${engwords[randIndex].split("").join('</span><span class="letter">')}</span></div>`;
 }
+function imgtoggle() {
+    const randImg = Math.floor(Math.random() * 6) + 1;
+    const check = 0;
+    if (check !== randImg) {
+        document.body.style.backgroundImage = `url('/assets/back${randImg}.jpg')`;
+        check = randImg;
+    } else {
+        imgtoggle();
+    }
+}
 
 async function main() {
     typingMain.focus();
+    document.body.style.backgroundImage = `url('/assets/back5.jpg')`;
+    document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
     words.innerHTML = "";
     let wordlength = 55;
     for (let i = 0; i < wordlength; i++) {
@@ -47,7 +59,12 @@ async function main() {
         const currentWord = document.querySelector(".word.current");
         const isLetter = key.length === 1 && key !== " ";
         const isSpace = key === " ";
+        const isTab = key === "Tab";
         console.log({ key, expected });
+        if (isTab) {
+            ev.preventDefault();
+            window.location.reload();
+        }
         if (isLetter) {
             if (currentLetter) {
                 addClass(
