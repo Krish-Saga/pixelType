@@ -5,34 +5,31 @@
     font-style: normal;
 }
 #timer {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin: 1rem;
-    position: absolute;
-    left: 2rem;
 }
 #info {
-    color: var(--peach);
+    color: var(--rain);
     position: relative;
-    border: 2px solid black;
-    margin-top: 3rem;
+    margin-top: 2rem;
     display: flex;
     align-items: center;
     gap: 5rem;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 #modes {
-    padding: 0 1rem;
-    border: 2px solid black;
+    display: flex;
+    gap: 2rem;
+    padding: 0.4rem;
+    border: 2px solid var(--sage);
     border-radius: 10px;
 }
 #seconds {
-    padding: 0 1rem;
+    padding: 0.4rem;
     border-radius: 10px;
     display: flex;
-    justify-content: center;
-    align-items: center;
     gap: 2rem;
-    border: 2px solid black;
+    border: 2px solid var(--sage);
 }
 
 * {
@@ -60,14 +57,13 @@
 
 body {
     height: 100vh;
+    font-family: "Pixelify Sans";
     cursor: var(--cursor-default);
     background-image: url("./assets/back4.jpg");
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
-    font-family: "WizardManse", sans-serif;
     font-size: 2rem;
-    backdrop-filter: brightness(70%);
 }
 ul {
     list-style: none;
@@ -78,13 +74,29 @@ ul {
     margin: 1rem 2rem;
 }
 a {
-    color: var(--ink);
+    color: var(--storm);
+    display: inline-block;
+    box-shadow: 0 2px 0 2px var(--rain);
     text-align: center;
-    padding: 0.5rem 1rem;
+    padding: 5px;
+    border: 2px solid var(--rain);
     border-radius: 12px;
     cursor: var(--cursor-point);
 }
+a:hover {
+    filter: brightness(80%);
+}
+
+#title:active {
+    transform: scale(0.97);
+}
+a:active {
+    transform: translateY(5px);
+    box-shadow: 0 1px 0 1px;
+    color: var(--mist);
+}
 nav {
+    margin: 1rem 0;
     display: flex;
 }
 #navbar {
@@ -95,12 +107,14 @@ nav {
 }
 
 #title {
+    font-family: "WizardManse", sans-serif;
     color: var(--rain);
     text-decoration: underline;
-    position: absolute;
-    left: 1rem;
+    position: fixed;
+    left: 0.1rem;
+    top: 0;
     cursor: var(--cursor-point);
-    margin: 0.3rem 2rem;
+    margin: -1rem 2rem;
 }
 main {
     display: flex;
@@ -112,7 +126,7 @@ main {
     background-color: rgba(255, 255, 2555, 0.2);
     border-radius: 8px;
     outline: 0;
-    margin-top: 5rem;
+    margin-top: 2rem;
     width: 80vw;
     display: flex;
     flex-wrap: wrap;
@@ -124,9 +138,8 @@ main {
 .word {
     display: inline-block;
     margin: 0 10px;
-    border: 2px solid white;
+    line-height: 1.5;
     font-size: 2.3rem;
-    font-family: "Pixelify Sans";
     color: var(--rain);
 }
 @keyframes blink {

@@ -4,6 +4,8 @@ const typingMain = document.getElementById("typing-main");
 const words = document.getElementById("words");
 const engwords = english.words;
 
+let Imgindex = 0;
+
 function moveCursor() {
     const nextLetter = document.querySelector(".letter.current");
     const wordEnd = document.querySelector(".word.current");
@@ -26,14 +28,8 @@ function randWords() {
     return `<div class="word"><span class="letter">${engwords[randIndex].split("").join('</span><span class="letter">')}</span></div>`;
 }
 function imgtoggle() {
-    const randImg = Math.floor(Math.random() * 6) + 1;
-    const check = 0;
-    if (check !== randImg) {
-        document.body.style.backgroundImage = `url('/assets/back${randImg}.jpg')`;
-        check = randImg;
-    } else {
-        imgtoggle();
-    }
+    document.body.style.backgroundImage = `url('/assets/back${Imgindex}.jpg')`;
+    Imgindex = (Imgindex % 6) + 1;
 }
 
 async function main() {
@@ -102,6 +98,9 @@ async function main() {
         }
         // Moving cursor yayyyyyyyyyyyyyyyy
         moveCursor();
+    });
+    document.getElementById("title").addEventListener("click", () => {
+        window.location.reload();
     });
 }
 
