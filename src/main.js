@@ -46,7 +46,7 @@ async function main() {
             } else {
                 const incorrectLetter = document.createElement("span");
                 incorrectLetter.innerHTML = key;
-                incorrectLetter.classname = "letter incorrect extra ";
+                incorrectLetter.className = "letter incorrect extra ";
                 currentWord.appendChild(incorrectLetter);
             }
         }
@@ -67,6 +67,14 @@ async function main() {
                 removeClass(currentLetter, "current");
             }
             addClass(currentWord.nextSibling.firstChild, "current");
+        }
+        // Moving cursor yayyyyyyyyyyyyyyyy
+        const nextLetter = document.querySelector(".letter.current");
+        const cursor = document.getElementById("cursor");
+        const newposition = nextLetter.getBoundingClientRect();
+        if (nextLetter) {
+            cursor.style.top = newposition.top + 2 + "px";
+            cursor.style.left = newposition.left + 2 + "px";
         }
     });
 }
