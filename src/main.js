@@ -1,21 +1,76 @@
 import english from "./assets/english.json";
 
 const typingMain = document.getElementById("typing-main");
-const words = english.words;
+const words = document.getElementById("words");
+const engwords = english.words;
+
+function addClass(el, classname) {
+    el.className += " " + classname;
+}
+
+function removeClass(el, classname) {
+    el.className = el.className.replace(classname, "");
+}
 
 function randWords() {
-    const randIndex = Math.ceil(Math.random() * words.length);
-    return `<div class="word"><span class="letter">${words[randIndex].split("").join('</span><span class="letter">')}</span></div>`;
+    const randIndex = Math.floor(Math.random() * engwords.length);
+    return `<div class="word"><span class="letter">${engwords[randIndex].split("").join('</span><span class="letter">')}</span></div>`;
 }
 
 async function main() {
-    typingMain.innerHTML = "";
+    typingMain.focus();
+    words.innerHTML = "";
     let wordlength = 55;
     for (let i = 0; i < wordlength; i++) {
-        typingMain.innerHTML += randWords();
+        words.innerHTML += randWords();
     }
-    typingMain.addEventListener("keyup", (ev) => {
-        console.log(ev);
+    addClass(document.querySelector(".word"), "current");
+    addClass(document.querySelector(".letter"), "current");
+
+    typingMain.addEventListener("keydown", (ev) => {
+        const key = ev.key;
+        const currentLetter = document.querySelector(".letter.current");
+        const expected = currentLetter?.innerHTML || " ";
+        const currentWord = document.querySelector(".word.current");
+        const isLetter = key.length === 1 && key !== " ";
+        const isSpace = key === " ";
+        console.log({ key, expected });
+        if (isLetter) {
+            if (currentLetter) {
+                addClass(
+                    currentLetter,
+                    key === expected ? "correct" : "incorrect",
+                );
+                removeClass(currentLetter, "current");
+                addClass(currentLetter.nextSibling, "current");
+                if (currentLetter.nextSibling) {
+                    addClass(currentLetter.nextSibling, "current");
+                }
+            } else {
+                const incorrectLetter = document.createElement("span");
+                incorrectLetter.innerHTML = key;
+                incorrectLetter.classname = "letter incorrect extra ";
+                currentWord.appendChild(incorrectLetter);
+            }
+        }
+        if (isSpace) {
+            if (expected !== " ") {
+                const lettersInvalidate = [
+                    ...document.querySelectorAll(
+                        ".word.current .letter:not(.correct)",
+                    ),
+                ];
+                lettersInvalidate.forEach((letter) => {
+                    addClass(letter, "incorrect");
+                });
+            }
+            removeClass(currentWord, "current");
+            addClass(currentWord.nextSibling, "current");
+            if (currentLetter) {
+                removeClass(currentLetter, "current");
+            }
+            addClass(currentWord.nextSibling.firstChild, "current");
+        }
     });
 }
 
