@@ -9,7 +9,8 @@
     margin: 1rem;
 }
 #info {
-    color: var(--rain);
+    font-size: 1.4rem;
+    color: var(--frost);
     position: relative;
     margin-top: 2rem;
     display: flex;
@@ -17,15 +18,23 @@
     gap: 5rem;
     justify-content: space-evenly;
 }
-#modes {
-    display: flex;
-    gap: 2rem;
-    padding: 0.4rem;
-    border: 2px solid var(--sage);
-    border-radius: 10px;
+#seconds > span,
+#modes > span {
+    border: 2px solid var(--lavender);
+    background-color: var(--storm);
+    padding: 3px 10px;
+    border-radius: 12px;
 }
-#seconds {
-    padding: 0.4rem;
+
+#seconds > span:active,
+#modes > span:active {
+    transform: scale(0.9);
+}
+
+#seconds,
+#modes {
+    backdrop-filter: brightness(80%);
+    padding: 1rem;
     border-radius: 10px;
     display: flex;
     gap: 2rem;
@@ -81,10 +90,12 @@ a {
     padding: 5px;
     border: 2px solid var(--rain);
     border-radius: 12px;
-    cursor: var(--cursor-point);
 }
-a:hover {
+a:hover,
+#modes span:hover,
+#seconds span:hover {
     filter: brightness(80%);
+    cursor: var(--cursor-point);
 }
 
 #title:active {
