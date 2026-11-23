@@ -9,7 +9,6 @@ let previousTop = null;
 let Imgindex = 0;
 
 function moveCursor() {
-    moveWindow();
     const nextLetter = document.querySelector(".letter.current");
     const wordEnd = document.querySelector(".word.current");
     const cursor = document.getElementById("cursor");
@@ -32,7 +31,9 @@ function moveWindow() {
         typingMainRect.top + (typingMainRect.height - lineHeight) / 2;
     console.log(wordsOffset);
     if (
-        (previousTop !== null && currentTop > previousTop, currentTop > center)
+        previousTop !== null &&
+        currentTop > previousTop &&
+        currentTop > center
     ) {
         const difference = center - currentRect.top;
         wordsOffset += difference;
@@ -147,9 +148,10 @@ async function main() {
                 removeClass(currentWord.lastChild, "correct");
             }
         }
-
+        // Moving window here
+        moveWindow();
         // Moving cursor yayyyyyyyyyyyyyyyy
-        requestAnimationFrame(moveCursor);
+        moveCursor();
     });
 
     document.getElementById("title").addEventListener("click", () => {
