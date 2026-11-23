@@ -8,6 +8,11 @@ let previousTop = null;
 let Imgindex = 0;
 let wordlength = 50;
 let activeMode = "timemode";
+const modeNumbers = document.getElementById("modeNumbers");
+const modes = document.querySelectorAll("#modes >span");
+const timer = document.getElementById("timer");
+const modediv = document.getElementById("modes");
+const nav = document.querySelector("nav");
 
 function modeValue() {
     const modeSpans = document.querySelectorAll("#modeNumbers > span");
@@ -16,7 +21,7 @@ function modeValue() {
             console.log("Active Mode", activeMode);
             console.log("Selected Value", mode.textContent);
             if (activeMode == "timemode") {
-                document.getElementById("timer").textContent = mode.textContent;
+                timer.textContent = mode.textContent;
             } else if (activeMode == "wordmode") {
                 wordlength = mode.textContent;
                 processingWords();
@@ -27,8 +32,6 @@ function modeValue() {
 }
 
 function modeChanger() {
-    const modeNumbers = document.getElementById("modeNumbers");
-    const modes = document.querySelectorAll("#modes >span");
     modes.forEach((mod) => {
         mod.addEventListener("click", () => {
             activeMode = mod.textContent + "mode";
@@ -130,18 +133,21 @@ async function processingWords() {
     addClass(document.querySelector(".letter"), "current");
     // Don't touch this first calculates font to place cursor in it's place
     await document.fonts.ready;
+    typemode(false);
     //==========================================
     requestAnimationFrame(moveCursor);
 }
-
-async function main() {
-    typingMain.focus();
-    document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
-    document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
-    reloadWordLength(wordlength);
-    processingWords();
-    modeChanger(); // It runs event listener for modes
+function typemode(toggle) {
+    if (activeMode == "timemode") {
+        timer.style.opacity = (+toggle).toString();
+    }
+    modeNumbers.style.opacity = (+!toggle).toString();
+    nav.style.opacity = (+!toggle).toString();
+    modediv.style.opacity = (+!toggle).toString();
+}
+function typingcheck() {
     typingMain.addEventListener("keydown", (ev) => {
+        typemode(true);
         const key = ev.key;
         const currentLetter = document.querySelector(".letter.current");
         const expected = currentLetter?.innerHTML || " ";
@@ -218,9 +224,19 @@ async function main() {
         // Moving cursor yayyyyyyyyyyyyyyyy
         moveCursor();
     });
+}
+
+async function main() {
+    typingMain.focus();
+    document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
+    document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
+    reloadWordLength(wordlength);
+    processingWords();
+    modeChanger(); // It runs event listener for modes
+    typingcheck();
 
     document.getElementById("title").addEventListener("click", () => {
-        window.location.reload();
+        processingWords();
     });
 }
 
