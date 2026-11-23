@@ -16,6 +16,8 @@ function modeValue() {
             console.log("Active Mode", activeMode);
             console.log("Selected Value", mode.textContent);
             if (activeMode == "timemode") {
+                document.getElementById("timer").textContent = mode.textContent;
+            } else if (activeMode == "wordmode") {
                 wordlength = mode.textContent;
                 reloadWordLength(wordlength);
             }
@@ -57,6 +59,7 @@ function modes() {
         activeMode = "quotemode";
         modeValue();
     });
+    modeValue();
 }
 
 function moveCursor() {
@@ -122,7 +125,7 @@ async function main() {
     typingMain.focus();
     document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
     document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
-    modes();
+    modes(); // It runs event listener for modes
     reloadWordLength(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
@@ -143,7 +146,7 @@ async function main() {
         console.log({ key, expected });
         if (isTab) {
             ev.preventDefault();
-            window.location.reload();
+            reloadWordLength(wordlength);
         }
         if (isLetter) {
             if (currentLetter) {
