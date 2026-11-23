@@ -18,7 +18,7 @@
     gap: 5rem;
     justify-content: space-evenly;
 }
-#seconds > span,
+#modeNumbers > span,
 #modes > span {
     border: 2px solid var(--lavender);
     background-color: var(--storm);
@@ -26,12 +26,12 @@
     border-radius: 12px;
 }
 
-#seconds > span:active,
+#modeNumbers > span:active,
 #modes > span:active {
     transform: scale(0.9);
 }
 
-#seconds,
+#modeNumbers,
 #modes {
     backdrop-filter: brightness(80%);
     padding: 1rem;
@@ -93,7 +93,7 @@ a {
 }
 a:hover,
 #modes span:hover,
-#seconds span:hover {
+#modeNumbers span:hover {
     filter: brightness(80%);
     cursor: var(--cursor-point);
 }

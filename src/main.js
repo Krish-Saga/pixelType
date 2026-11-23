@@ -5,8 +5,59 @@ const words = document.getElementById("words");
 const engwords = english.words;
 let wordsOffset = 0;
 let previousTop = null;
-
 let Imgindex = 0;
+let wordlength = 50;
+let activeMode = "timemode";
+
+function modeValue() {
+    const modeSpans = document.querySelectorAll("#modeNumbers > span");
+    modeSpans.forEach((mode) => {
+        mode.addEventListener("click", () => {
+            console.log("Active Mode", activeMode);
+            console.log("Selected Value", mode.textContent);
+            if (activeMode == "timemode") {
+                wordlength = mode.textContent;
+                reloadWordLength(wordlength);
+            }
+        });
+    });
+}
+
+function modes() {
+    const modeNumbers = document.getElementById("modeNumbers");
+    document.getElementById("timemode").addEventListener("click", () => {
+        modeNumbers.innerHTML = `
+					<span>15</span>
+					<span>30</span>
+					<span>60</span>
+					<span>120</span>
+
+        `;
+        activeMode = "timemode";
+        modeValue();
+    });
+    document.getElementById("wordmode").addEventListener("click", () => {
+        modeNumbers.innerHTML = `
+					<span>10</span>
+					<span>25</span>
+					<span>50</span>
+					<span>100</span>
+        `;
+        activeMode = "wordmode";
+        modeValue();
+    });
+    document.getElementById("quotemode").addEventListener("click", () => {
+        modeNumbers.innerHTML = `
+
+					<span>all</span>
+					<span>meme</span>
+					<span>short</span>
+					<span>long</span>
+        `;
+        activeMode = "quotemode";
+        modeValue();
+    });
+}
 
 function moveCursor() {
     const nextLetter = document.querySelector(".letter.current");
@@ -60,15 +111,19 @@ function imgtoggle() {
     Imgindex = (Imgindex % 6) + 1;
 }
 
+function reloadWordLength(wordlength) {
+    words.innerHTML = "";
+    for (let i = 0; i < wordlength; i++) {
+        words.innerHTML += randWords();
+    }
+}
+
 async function main() {
     typingMain.focus();
     document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
     document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
-    words.innerHTML = "";
-    let wordlength = 55;
-    for (let i = 0; i < wordlength; i++) {
-        words.innerHTML += randWords();
-    }
+    modes();
+    reloadWordLength(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
     // Don't touch this first calculates font to place cursor in it's place
