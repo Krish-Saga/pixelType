@@ -19,7 +19,7 @@ function modeValue() {
                 document.getElementById("timer").textContent = mode.textContent;
             } else if (activeMode == "wordmode") {
                 wordlength = mode.textContent;
-                reloadWordLength(wordlength);
+                processingWords();
             }
             typingMain.focus();
         });
