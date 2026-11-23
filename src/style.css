@@ -155,6 +155,7 @@ main {
     position: relative;
 }
 #words {
+    text-align: center;
     font-weight: 600;
     font-family: "DivineDeparture";
     width: 100%;
@@ -164,7 +165,7 @@ main {
 .word {
     display: inline-block;
     margin: 0 10px;
-    line-height: 1.5;
+    line-height: 1.6;
     font-size: 2.3rem;
     color: var(--ink);
 }
@@ -188,8 +189,9 @@ main {
 }
 #cursor {
     height: 2.4rem;
+    z-index: 999;
     width: 3px;
-    background: var(--peach);
+    background: var(--blush);
     position: fixed;
     animation: blink 1s infinite;
 }
