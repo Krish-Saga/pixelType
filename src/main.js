@@ -21,6 +21,7 @@ function modeValue() {
                 wordlength = mode.textContent;
                 reloadWordLength(wordlength);
             }
+            typingMain.focus();
         });
     });
 }
@@ -57,6 +58,7 @@ function modeChanger() {
             }
             // This reloads and changes the value of the modeNumbers after selecting mode
             modeValue();
+            typingMain.focus();
         });
     });
     // This make sures that page is listening when clicking directly on time as default
@@ -93,6 +95,7 @@ function moveWindow() {
         const difference = center - currentRect.top;
         wordsOffset += difference;
         words.style.transform = `translateY(${wordsOffset}px)`;
+        moveCursor();
     }
 
     previousTop = currentTop;
@@ -121,12 +124,7 @@ function reloadWordLength(wordlength) {
         words.innerHTML += randWords();
     }
 }
-
-async function main() {
-    typingMain.focus();
-    document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
-    document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
-    modeChanger(); // It runs event listener for modes
+async function processingWords() {
     reloadWordLength(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
@@ -134,7 +132,15 @@ async function main() {
     await document.fonts.ready;
     //==========================================
     requestAnimationFrame(moveCursor);
+}
 
+async function main() {
+    typingMain.focus();
+    document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
+    document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
+    reloadWordLength(wordlength);
+    processingWords();
+    modeChanger(); // It runs event listener for modes
     typingMain.addEventListener("keydown", (ev) => {
         const key = ev.key;
         const currentLetter = document.querySelector(".letter.current");
@@ -147,7 +153,7 @@ async function main() {
         console.log({ key, expected });
         if (isTab) {
             ev.preventDefault();
-            reloadWordLength(wordlength);
+            processingWords();
         }
         if (isLetter) {
             if (currentLetter) {
