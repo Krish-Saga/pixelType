@@ -25,40 +25,41 @@ function modeValue() {
     });
 }
 
-function modes() {
+function modeChanger() {
     const modeNumbers = document.getElementById("modeNumbers");
-    document.getElementById("timemode").addEventListener("click", () => {
-        modeNumbers.innerHTML = `
+    const modes = document.querySelectorAll("#modes >span");
+    modes.forEach((mod) => {
+        mod.addEventListener("click", () => {
+            activeMode = mod.textContent + "mode";
+            if (activeMode == "timemode") {
+                modeNumbers.innerHTML = `
 					<span>15</span>
 					<span>30</span>
 					<span>60</span>
 					<span>120</span>
 
         `;
-        activeMode = "timemode";
-        modeValue();
-    });
-    document.getElementById("wordmode").addEventListener("click", () => {
-        modeNumbers.innerHTML = `
+            } else if (activeMode == "wordmode") {
+                modeNumbers.innerHTML = `
 					<span>10</span>
 					<span>25</span>
 					<span>50</span>
 					<span>100</span>
         `;
-        activeMode = "wordmode";
-        modeValue();
-    });
-    document.getElementById("quotemode").addEventListener("click", () => {
-        modeNumbers.innerHTML = `
+            } else if (activeMode == "quotemode") {
+                modeNumbers.innerHTML = `
 
 					<span>all</span>
 					<span>meme</span>
 					<span>short</span>
 					<span>long</span>
         `;
-        activeMode = "quotemode";
-        modeValue();
+            }
+            // This reloads and changes the value of the modeNumbers after selecting mode
+            modeValue();
+        });
     });
+    // This make sures that page is listening when clicking directly on time as default
     modeValue();
 }
 
@@ -125,7 +126,7 @@ async function main() {
     typingMain.focus();
     document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
     document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
-    modes(); // It runs event listener for modes
+    modeChanger(); // It runs event listener for modes
     reloadWordLength(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
