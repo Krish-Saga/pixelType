@@ -139,12 +139,15 @@ main {
     outline: 0;
     margin-top: 2rem;
     width: 80vw;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
     height: 175px;
+    display: block;
     overflow: hidden;
     position: relative;
+}
+#words {
+    width: 100%;
+    position: relative;
+    transition: transform 0.15s ease;
 }
 .word {
     display: inline-block;

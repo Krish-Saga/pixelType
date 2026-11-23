@@ -3,16 +3,43 @@ import english from "./assets/english.json";
 const typingMain = document.getElementById("typing-main");
 const words = document.getElementById("words");
 const engwords = english.words;
+let wordsOffset = 0;
+let previousTop = null;
 
 let Imgindex = 0;
 
 function moveCursor() {
+    moveWindow();
     const nextLetter = document.querySelector(".letter.current");
     const wordEnd = document.querySelector(".word.current");
     const cursor = document.getElementById("cursor");
     const newposition = (nextLetter || wordEnd).getBoundingClientRect();
     cursor.style.top = newposition.top + 2 + "px";
     cursor.style.left = newposition[nextLetter ? "left" : "right"] + "px";
+}
+
+function moveWindow() {
+    const current =
+        document.querySelector(".letter.current") ||
+        document.querySelector(".word.current");
+    if (!current) return;
+    const typingMainRect = typingMain.getBoundingClientRect();
+    const currentRect = current.getBoundingClientRect();
+    const currentTop = current.getBoundingClientRect().top;
+    const lineHeight = parseFloat(getComputedStyle(current).lineHeight);
+    console.log(currentTop);
+    const center =
+        typingMainRect.top + (typingMainRect.height - lineHeight) / 2;
+    console.log(wordsOffset);
+    if (
+        (previousTop !== null && currentTop > previousTop, currentTop > center)
+    ) {
+        const difference = center - currentRect.top;
+        wordsOffset += difference;
+        words.style.transform = `translateY(${wordsOffset}px)`;
+    }
+
+    previousTop = currentTop;
 }
 
 function addClass(el, classname) {
@@ -46,7 +73,7 @@ async function main() {
     // Don't touch this first calculates font to place cursor in it's place
     await document.fonts.ready;
     //==========================================
-    moveCursor();
+    requestAnimationFrame(moveCursor);
 
     typingMain.addEventListener("keydown", (ev) => {
         const key = ev.key;
@@ -122,7 +149,7 @@ async function main() {
         }
 
         // Moving cursor yayyyyyyyyyyyyyyyy
-        moveCursor();
+        requestAnimationFrame(moveCursor);
     });
 
     document.getElementById("title").addEventListener("click", () => {
