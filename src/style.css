@@ -4,6 +4,14 @@
     font-weight: normal;
     font-style: normal;
 }
+
+@font-face {
+    font-family: "DivineDeparture";
+    src: url("/DepartureMono-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
 #timer {
     opacity: 0;
     font-size: 3.5rem;
@@ -146,6 +154,8 @@ main {
     position: relative;
 }
 #words {
+    font-weight: 600;
+    font-family: "DivineDeparture";
     width: 100%;
     position: relative;
     transition: transform 0.15s ease;
@@ -177,7 +187,7 @@ main {
 }
 #cursor {
     height: 2.4rem;
-    width: 5px;
+    width: 2px;
     background: var(--peach);
     position: fixed;
     animation: blink 1s infinite;
