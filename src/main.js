@@ -18,8 +18,6 @@ function modeValue() {
     const modeSpans = document.querySelectorAll("#modeNumbers > span");
     modeSpans.forEach((mode) => {
         mode.addEventListener("click", () => {
-            console.log("Active Mode", activeMode);
-            console.log("Selected Value", mode.textContent);
             if (activeMode == "timemode") {
                 timer.textContent = mode.textContent;
             } else if (activeMode == "wordmode") {
@@ -118,11 +116,20 @@ function randWords(wordlength) {
         const randIndex = Math.floor(Math.random() * engwords.length);
         unindexedWord.push(engwords[randIndex]);
     }
+
     words.innerHTML = unindexedWord
         .map((word, index) => {
             return `<div class="word" data-wordindex="${index + 1}">${word}</div>`;
         })
-        .join(" ");
+        .join("");
+    document.querySelectorAll(".word").forEach((div) => {
+        div.innerHTML = div.textContent
+            .split("")
+            .map((letters, index) => {
+                return `<span class="letter" data-letterindex="${index + 1}">${letters}</span>`;
+            })
+            .join("");
+    });
 }
 function imgtoggle() {
     document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back${Imgindex}.jpg')`;
