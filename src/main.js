@@ -1,6 +1,6 @@
 import english from "./assets/english.json";
-
 const typingMain = document.getElementById("typing-main");
+const wordinput = document.getElementById("type");
 const words = document.getElementById("words");
 const engwords = english.words;
 let wordsOffset = 0;
@@ -24,7 +24,7 @@ function modeValue() {
                 wordlength = mode.textContent;
                 processingWords();
             }
-            typingMain.focus();
+            wordinput.focus();
         });
     });
 }
@@ -59,7 +59,7 @@ function modeChanger() {
             }
             // This reloads and changes the value of the modeNumbers after selecting mode
             modeValue();
-            typingMain.focus();
+            wordinput.focus();
         });
     });
     // This make sures that page is listening when clicking directly on time as default
@@ -71,36 +71,43 @@ function moveCursor() {
     const wordEnd = document.querySelector(".word.current");
     const cursor = document.getElementById("cursor");
     const newposition = (nextLetter || wordEnd).getBoundingClientRect();
-    cursor.style.top = newposition.top + 2 + "px";
-    cursor.style.left = newposition[nextLetter ? "left" : "right"] + "px";
+    cursor.style.top =
+        newposition.top +
+        newposition.height / 2 -
+        cursor.offsetHeight / 2 +
+        "px";
+    cursor.style.left =
+        newposition[nextLetter ? "left" : "right"] -
+        cursor.offsetWidth / 2 +
+        "px";
 }
 
-function moveWindow() {
-    const current =
-        document.querySelector(".letter.current") ||
-        document.querySelector(".word.current");
-    if (!current) return;
-    const typingMainRect = typingMain.getBoundingClientRect();
-    const currentRect = current.getBoundingClientRect();
-    const currentTop = current.getBoundingClientRect().top;
-    const lineHeight = parseFloat(getComputedStyle(current).lineHeight);
-    console.log(currentTop);
-    const center =
-        typingMainRect.top + (typingMainRect.height - lineHeight) / 2;
-    console.log(wordsOffset);
-    if (
-        previousTop !== null &&
-        currentTop > previousTop &&
-        currentTop > center
-    ) {
-        const difference = center - currentRect.top;
-        wordsOffset += difference;
-        words.style.transform = `translateY(${wordsOffset}px)`;
-        moveCursor();
-    }
-
-    previousTop = currentTop;
-}
+// function moveWindow() {
+//     const current =
+//         document.querySelector(".letter.current") ||
+//         document.querySelector(".word.current");
+//     if (!current) return;
+//     const typingMainRect = typingMain.getBoundingClientRect();
+//     const currentRect = current.getBoundingClientRect();
+//     const currentTop = current.getBoundingClientRect().top;
+//     const lineHeight = parseFloat(getComputedStyle(current).lineHeight);
+//     console.log(currentTop);
+//     const center =
+//         typingMainRect.top + (typingMainRect.height - lineHeight) / 2;
+//     console.log(wordsOffset);
+//     if (
+//         previousTop !== null &&
+//         currentTop > previousTop &&
+//         currentTop > center
+//     ) {
+//         const difference = center - currentRect.top;
+//         wordsOffset += difference;
+//         words.style.transform = `translateY(${wordsOffset}px)`;
+//         moveCursor();
+//     }
+//
+//     previousTop = currentTop;
+// }
 
 function addClass(el, classname) {
     el.classList.add(classname);
@@ -119,14 +126,14 @@ function randWords(wordlength) {
 
     words.innerHTML = unindexedWord
         .map((word, index) => {
-            return `<div class="word" data-wordindex="${index + 1}">${word}</div>`;
+            return `<div class="word" data-wordindex="${index + 1}"  >${word}</div>`;
         })
         .join("");
     document.querySelectorAll(".word").forEach((div) => {
         div.innerHTML = div.textContent
             .split("")
             .map((letters, index) => {
-                return `<span class="letter" data-letterindex="${index + 1}">${letters}</span>`;
+                return `<span class="letter" data-letterindex="${index + 1}" data-char="${letters}">${letters}</span>`;
             })
             .join("");
     });
@@ -139,7 +146,7 @@ function imgtoggle() {
 async function processingWords() {
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
-    typingMain.focus();
+    wordinput.focus();
     // Don't touch this first calculates font to place cursor in it's place
     await document.fonts.ready;
     typemode(false);
@@ -155,6 +162,9 @@ function typemode(toggle) {
     modediv.style.opacity = (+!toggle).toString();
 }
 function typingcheck() {
+    wordinput.addEventListener("input", (ev) => {
+        console.log(ev);
+    });
     typingMain.addEventListener("keydown", (ev) => {
         typemode(true);
         const key = ev.key;
@@ -229,7 +239,7 @@ function typingcheck() {
             }
         }
         // Moving window here
-        moveWindow();
+        // moveWindow();
         // Moving cursor yayyyyyyyyyyyyyyyy
         moveCursor();
     });
@@ -240,6 +250,7 @@ async function main() {
     document.getElementById("imgtoggle").addEventListener("click", imgtoggle); // Makes the image button active
     randWords(wordlength);
     processingWords();
+    moveCursor();
     typingcheck();
     modeChanger(); // It runs event listener for modes
     // typingcheck();
