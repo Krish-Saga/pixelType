@@ -6,7 +6,7 @@ const engwords = english.words;
 let wordsOffset = 0;
 let previousTop = null;
 let Imgindex = 0;
-let wordlength = 50;
+let wordlength = 100;
 let activeMode = "timemode";
 const modeNumbers = document.getElementById("modeNumbers");
 const modes = document.querySelectorAll("#modes >span");
@@ -112,25 +112,27 @@ function removeClass(el, classname) {
     el.classList.remove(classname);
 }
 
-function randWords() {
-    const randIndex = Math.floor(Math.random() * engwords.length);
-    return `<div class="word"><span class="letter">${engwords[randIndex].split("").join('</span><span class="letter">')}</span></div>`;
+function randWords(wordlength) {
+    const unindexedWord = [];
+    for (let i = 0; i < wordlength; i++) {
+        const randIndex = Math.floor(Math.random() * engwords.length);
+        unindexedWord.push(engwords[randIndex]);
+    }
+    words.innerHTML = unindexedWord
+        .map((word, index) => {
+            return `<div class="word" data-wordindex="${index + 1}">${word}</div>`;
+        })
+        .join(" ");
 }
 function imgtoggle() {
     document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back${Imgindex}.jpg')`;
     Imgindex = (Imgindex % 6) + 1;
 }
 
-function reloadWordLength(wordlength) {
-    words.innerHTML = "";
-    for (let i = 0; i < wordlength; i++) {
-        words.innerHTML += randWords();
-    }
-}
 async function processingWords() {
-    reloadWordLength(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
+    typingMain.focus();
     // Don't touch this first calculates font to place cursor in it's place
     await document.fonts.ready;
     typemode(false);
@@ -227,13 +229,13 @@ function typingcheck() {
 }
 
 async function main() {
-    typingMain.focus();
-    document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`;
-    document.getElementById("imgtoggle").addEventListener("click", imgtoggle);
-    reloadWordLength(wordlength);
+    document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`; // Sets Background Image
+    document.getElementById("imgtoggle").addEventListener("click", imgtoggle); // Makes the image button active
+    randWords(wordlength);
     processingWords();
-    modeChanger(); // It runs event listener for modes
     typingcheck();
+    modeChanger(); // It runs event listener for modes
+    // typingcheck();
 
     document.getElementById("title").addEventListener("click", () => {
         processingWords();
