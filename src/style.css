@@ -11,6 +11,10 @@
     font-weight: normal;
     font-style: normal;
 }
+.extra {
+    color: red;
+    filter: brightness(70%);
+}
 
 #timer {
     opacity: 0;

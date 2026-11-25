@@ -173,7 +173,7 @@ function extraIncorrectLetter(key) {
     const currentWord = document.querySelector(".word.current");
     const extraLetter = document.createElement("span");
     extraLetter.textContent = key;
-    extraLetter.classList.add("extra", "incorrect", "letter");
+    extraLetter.classList.add("extra", "letter");
     currentWord.appendChild(extraLetter);
 }
 function typingcheck() {
@@ -192,6 +192,7 @@ function typingcheck() {
         const key = ev.data;
         const currentLetter = document.querySelector(".letter.current");
         const currentWord = document.querySelector(".word.current");
+        const wrongWordCounts = currentWord.querySelectorAll(":scope>.extra");
         const expected = currentLetter?.getAttribute("data-char") || " ";
         if (ev.inputType === "insertText") {
             if (currentLetter && currentWord) {
@@ -211,7 +212,7 @@ function typingcheck() {
                         "current",
                     );
                     addClass(currentWord.nextElementSibling, "current");
-                } else if (key !== expected) {
+                } else if (key !== expected && wrongWordCounts.length < 22) {
                     extraIncorrectLetter(key);
                 }
             }
@@ -238,7 +239,9 @@ function typingcheck() {
             } else if (!currentLetter && currentWord) {
                 // this is to check if we are at the end of a word ( space position)
                 const lastLetter = currentWord.lastElementChild;
-
+                if (lastLetter.classList.contains("extra")) {
+                    lastLetter.remove();
+                }
                 addClass(lastLetter, "current");
                 removeClass(lastLetter, "correct");
                 removeClass(lastLetter, "incorrect");
@@ -259,39 +262,42 @@ function typingcheck() {
                 } else if (currentWord.previousElementSibling) {
                     // This function triggers if the cursor is at the front of the word that is current letter is first element of the current word then it triggers on Ctrl-Backspace
                     // This code blocks moves cursor and position to the first character of the previousWord (IT is buggy and stops working sometimes)
-                    console.log("I'm tirregering");
                     const previousWord = currentWord.previousElementSibling;
-                    const previousLetter = previousWord.lastElementChild;
-                    const finalWord = previousWord.firstElementChild;
-
+                    const previousLetter = previousWord.firstElementChild;
                     addClass(previousLetter, "current");
                     addClass(previousWord, "current");
-
                     removeClass(currentWord, "current");
                     removeClass(currentLetter, "current");
-                    let currentEl = document.querySelector(".letter.current");
-                    while (currentEl) {
-                        removeClass(currentEl, "correct");
-                        removeClass(currentEl, "incorrect");
-                        currentEl = currentEl.previousElementSibling;
+                    const rmPreviousLetters =
+                        previousWord.querySelectorAll(":scope>.letter");
+                    rmPreviousLetters.forEach((letter) => {
+                        letter.classList.remove("correct", "incorrect");
+                    });
+                    // This is to calculate extra letters input instead of expected space
+                    const wrongWordCounts =
+                        previousWord.querySelectorAll(":scope>.extra");
+                    if (wrongWordCounts) {
+                        wrongWordCounts.forEach((word) => {
+                            word.remove();
+                        });
                     }
-                    removeClass(previousLetter, "current");
-                    addClass(finalWord, "current");
                 }
-                console.log("getting here");
             } else if (!currentLetter && currentWord) {
                 // It takes care of Ctrl-Backspace when the cursor(or current word has no current letter left that is it si in the last of the word)
                 // It jumps in front of the  current word  from the last when pressed  ctrl backspace
-                const lastLetter = currentWord.lastElementChild;
-                const finalWord = currentWord.firstElementChild;
-                addClass(lastLetter, "current");
-                let currentEl = lastLetter;
-                while (currentEl) {
-                    removeClass(currentEl, "correct");
-                    removeClass(currentEl, "incorrect");
-                    currentEl = currentEl.previousElementSibling;
+
+                const rmWrongLetters =
+                    currentWord.querySelectorAll(":scope>.letter");
+                rmWrongLetters.forEach((letter) => {
+                    letter.classList.remove("correct", "incorrect");
+                });
+                // This is to calculate extra letters input instead of expected space
+                if (wrongWordCounts) {
+                    wrongWordCounts.forEach((word) => {
+                        word.remove();
+                    });
                 }
-                removeClass(lastLetter, "current");
+                const finalWord = currentWord.firstElementChild;
                 addClass(finalWord, "current");
             }
         }
