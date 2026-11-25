@@ -109,6 +109,7 @@ function moveWindow() {
     words.style.transform = `translateY(${wordsOffset}px)`;
 
     moveCursor();
+    textareaMove();
 }
 
 function addClass(el, classname) {
@@ -170,6 +171,15 @@ function typemode(toggle) {
 }
 function typingcheck() {
     wordinput.focus();
+    wordinput.addEventListener("keydown", (ev) => {
+        const isTab = ev.key === "Tab";
+        if (isTab) {
+            ev.preventDefault();
+            typemode(false);
+            processingWords();
+            wordinput.focus();
+        }
+    });
     wordinput.addEventListener("input", (ev) => {
         typemode(true);
         const key = ev.data;
@@ -269,11 +279,7 @@ function typingcheck() {
                 }
             }
         }
-        console.log(key);
-        console.log(expected);
-        console.log(ev.inputType);
         moveWindow();
-        textareaMove();
     });
 }
 
@@ -284,16 +290,10 @@ async function main() {
     textareaMove();
     moveCursor();
     modeChanger(); // It runs event listener for modes
-    typingMain.addEventListener("keydown", (ev) => {
-        let key = ev.key;
-        console.log(key);
-        const isTab = key === "Tab";
-        if (isTab) {
-            ev.preventDefault();
-            processingWords();
-        }
-        typingcheck();
+    typingMain.addEventListener("click", () => {
+        wordinput.focus();
     });
+    typingcheck();
 
     document.getElementById("title").addEventListener("click", () => {
         processingWords();
