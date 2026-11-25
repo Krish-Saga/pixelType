@@ -1,6 +1,5 @@
 import english from "./assets/english.json";
 const typingMain = document.getElementById("typing-main");
-let previousTop = null;
 const cursor = document.getElementById("cursor");
 const wordinput = document.getElementById("type");
 const words = document.getElementById("words");
@@ -25,7 +24,7 @@ function modeValue() {
                 wordlength = mode.textContent;
                 processingWords();
             }
-            wordinput.focus();
+            typingMain.focus();
         });
     });
 }
@@ -60,7 +59,7 @@ function modeChanger() {
             }
             // This reloads and changes the value of the modeNumbers after selecting mode
             modeValue();
-            wordinput.focus();
+            typingMain.focus();
         });
     });
     // This make sures that page is listening when clicking directly on time as default
@@ -152,7 +151,7 @@ async function processingWords() {
     randWords(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
-    wordinput.focus();
+    typingMain.focus();
     // Don't touch this first calculates font to place cursor in it's place
     await document.fonts.ready;
     //==========================================
@@ -170,6 +169,7 @@ function typemode(toggle) {
     modediv.style.opacity = (+!toggle).toString();
 }
 function typingcheck() {
+    wordinput.focus();
     wordinput.addEventListener("input", (ev) => {
         typemode(true);
         const key = ev.data;
@@ -275,62 +275,6 @@ function typingcheck() {
         moveWindow();
         textareaMove();
     });
-    // typingMain.addEventListener("keydown", (ev) => {
-    //     const currentLetter = document.querySelector(".letter.current");
-    //     const expected = currentLetter?.innerHTML || " ";
-    //     const currentWord = document.querySelector(".word.current");
-    //     const isLetter = key.length === 1 && key !== " ";
-    //     const isSpace = key === " ";
-    //     const isTab = key === "Tab";
-    //     const isBackspace = key === "Backspace";
-    //     console.log({ key, expected });
-    //     if (isTab) {
-    //         ev.preventDefault();
-    //         processingWords();
-    //     }
-    //     if (isLetter) {
-    //         if (currentLetter) {
-    //             addClass(
-    //                 currentLetter,
-    //                 key === expected ? "correct" : "incorrect",
-    //             );
-    //             removeClass(currentLetter, "current");
-    //             if (currentLetter.nextSibling) {
-    //                 addClass(currentLetter.nextSibling, "current");
-    //             }
-    //         } else {
-    //             const incorrectLetter = document.createElement("span");
-    //             incorrectLetter.innerHTML = key;
-    //             incorrectLetter.className = "letter incorrect extra ";
-    //             currentWord.appendChild(incorrectLetter);
-    //         }
-    //     }
-    //     if (isSpace) {
-    //         if (expected !== " ") {
-    //             const lettersInvalidate = [
-    //                 ...document.querySelectorAll(
-    //                     ".word.current .letter:not(.correct)",
-    //                 ),
-    //             ];
-    //             lettersInvalidate.forEach((letter) => {
-    //                 addClass(letter, "incorrect");
-    //             });
-    //         }
-    //         removeClass(currentWord, "current");
-    //         addClass(currentWord.nextSibling, "current");
-    //         if (currentLetter) {
-    //             removeClass(currentLetter, "current");
-    //         }
-    //         addClass(currentWord.nextSibling.firstChild, "current");
-    //     }
-    //
-    //     if (isBackspace) {
-    //     }
-    //     // Moving window here
-    //     // moveWindow();
-    //     // Moving cursor yayyyyyyyyyyyyyyyy
-    //     moveCursor();
-    // });
 }
 
 async function main() {
@@ -339,9 +283,17 @@ async function main() {
     processingWords();
     textareaMove();
     moveCursor();
-    typingcheck();
     modeChanger(); // It runs event listener for modes
-    // typingcheck();
+    typingMain.addEventListener("keydown", (ev) => {
+        let key = ev.key;
+        console.log(key);
+        const isTab = key === "Tab";
+        if (isTab) {
+            ev.preventDefault();
+            processingWords();
+        }
+        typingcheck();
+    });
 
     document.getElementById("title").addEventListener("click", () => {
         processingWords();
