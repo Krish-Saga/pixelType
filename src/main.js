@@ -237,46 +237,50 @@ function typingcheck() {
             if (currentLetter && currentWord) {
                 if (currentLetter !== currentWord.firstChild) {
                     // This code blocks loops through currentLetter to firstchildSibling
+                    const finalWord = currentWord.firstElementChild;
                     let currentEl = currentLetter;
                     while (currentEl) {
-                        console.log("fuck");
-                        removeClass(currentEl, "current");
-                        addClass(currentEl, "current");
                         removeClass(currentEl, "correct");
                         removeClass(currentEl, "incorrect");
                         currentEl = currentEl.previousElementSibling;
                     }
+                    addClass(finalWord, "current");
+                    removeClass(currentLetter, "current");
                 } else if (currentWord.previousElementSibling) {
                     // From first if code block it confirms that this is the firstletter of element word and running this code
                     // This code blocks moves cursor and position to the first character of the previousWord
                     const previousWord = currentWord.previousElementSibling;
                     const previousLetter = previousWord.lastElementChild;
-                    removeClass(currentWord, "current");
-                    addClass(previousWord, "current");
-                    addClass(previousLetter, "current");
-                    let currentEl = previousLetter;
+                    const finalWord = previousWord.firstElementChild;
 
+                    addClass(previousLetter, "current");
+                    addClass(previousWord, "current");
+
+                    removeClass(currentWord, "current");
+                    removeClass(currentLetter, "current");
+                    let currentEl = document.querySelector(".letter.current");
                     while (currentEl) {
-                        removeClass(currentEl, "current");
-                        addClass(currentEl, "current");
                         removeClass(currentEl, "correct");
                         removeClass(currentEl, "incorrect");
                         currentEl = currentEl.previousElementSibling;
                     }
+                    removeClass(previousLetter, "current");
+                    addClass(finalWord, "current");
                 }
             } else if (!currentLetter && currentWord) {
                 // It takes care of Ctrl-Backspace when the cursor(or current word has no current letter left that is it si in the last of the word)
                 // It jumps in front of the  current word  from the last when pressed  ctrl backspace
                 const lastLetter = currentWord.lastElementChild;
+                const finalWord = currentWord.firstElementChild;
                 addClass(lastLetter, "current");
                 let currentEl = lastLetter;
                 while (currentEl) {
-                    removeClass(currentEl, "currentEl");
-                    addClass(currentEl, "current");
                     removeClass(currentEl, "correct");
                     removeClass(currentEl, "incorrect");
                     currentEl = currentEl.previousElementSibling;
                 }
+                removeClass(lastLetter, "current");
+                addClass(finalWord, "current");
             }
         }
         moveWindow();
