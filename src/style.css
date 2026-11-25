@@ -12,6 +12,7 @@
     font-style: normal;
 }
 .extra {
+    font-family: "DivineDeparture";
     color: red;
     filter: brightness(70%);
 }
@@ -206,5 +207,8 @@ main {
     width: 4px;
     background: var(--frost);
     position: fixed;
+    transition:
+        top 100ms ease,
+        left 100ms ease;
     animation: blink 1s infinite;
 }

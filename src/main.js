@@ -192,6 +192,7 @@ function typingcheck() {
         const key = ev.data;
         const currentLetter = document.querySelector(".letter.current");
         const currentWord = document.querySelector(".word.current");
+        const wordswrapper = document.getElementById("words");
         const wrongWordCounts = currentWord.querySelectorAll(":scope>.extra");
         const expected = currentLetter?.getAttribute("data-char") || " ";
         if (ev.inputType === "insertText") {
@@ -204,7 +205,10 @@ function typingcheck() {
                 if (currentLetter.nextElementSibling) {
                     addClass(currentLetter.nextElementSibling, "current");
                 }
-            } else if (!currentLetter && currentWord) {
+            } else if (
+                !currentLetter &&
+                currentWord !== wordswrapper.lastElementChild
+            ) {
                 if (key === expected) {
                     removeClass(currentWord, "current");
                     addClass(
@@ -302,8 +306,6 @@ function typingcheck() {
             }
         }
         moveWindow();
-        console.log(wordinput.value);
-        console.log(ev.inputType);
     });
 }
 
