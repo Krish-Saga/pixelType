@@ -187,7 +187,8 @@ function typingcheck() {
             wordinput.focus();
         }
     });
-    wordinput.addEventListener("input", (ev) => {
+    wordinput.addEventListener("beforeinput", (ev) => {
+        ev.preventDefault();
         typemode(true);
         const key = ev.data;
         const currentLetter = document.querySelector(".letter.current");
