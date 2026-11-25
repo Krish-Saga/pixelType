@@ -208,6 +208,7 @@ function typingcheck() {
                     removeClass(previousLetter, "incorrect");
                 } else if (currentWord.previousElementSibling) {
                     // This code blocks moves cursor and position to the last chracter of the previous word
+                    // From first if code block it confirms that this is the firstletter of element word
                     removeClass(currentLetter, "current");
                     removeClass(currentWord, "current");
 
@@ -225,11 +226,35 @@ function typingcheck() {
         } else if (ev.inputType === "deleteWordBackward") {
             if (currentLetter && currentWord) {
                 if (currentLetter !== currentWord.firstChild) {
-                    removeClass(currentLetter, "current");
-                    const firstWordLetter = currentWord.firstElementChild;
-                    addClass(firstWordLetter, "current");
-                    removeClass(firstWordLetter, "correct");
-                    removeClass(firstWordLetter, "incorrect");
+                    // This code blocks loops through currentLetter to firstchildSibling
+                    let currentEl = currentLetter;
+                    while (currentEl) {
+                        console.log("fuck");
+                        removeClass(currentEl, "current");
+                        addClass(currentEl, "current");
+                        removeClass(currentEl, "correct");
+                        removeClass(currentEl, "incorrect");
+                        currentEl = currentEl.previousElementSibling;
+                    }
+                } else if (currentWord.previousElementSibling) {
+                    // From first if code block it confirms that this is the firstletter of element word and running this code
+                    // This code blocks moves cursor and position to the first character of the previousWord
+                    const previousWord = currentWord.previousElementSibling;
+                    const previousLetter = previousWord.lastElementChild;
+                    removeClass(currentWord, "current");
+                    addClass(previousWord, "current");
+                    addClass(previousLetter, "current");
+                    let currentEl = previousLetter;
+
+                    while (currentEl) {
+                        console.log("blah");
+                        console.log(currentEl);
+                        removeClass(currentEl, "current");
+                        addClass(currentEl, "current");
+                        removeClass(currentEl, "correct");
+                        removeClass(currentEl, "incorrect");
+                        currentEl = currentEl.previousElementSibling;
+                    }
                 }
             }
         }
