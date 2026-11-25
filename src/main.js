@@ -194,15 +194,31 @@ function typingcheck() {
                 addClass(currentWord.nextSibling, "current");
             }
         } else if (ev.inputType === "deleteContentBackward") {
+            // This if block is for inside a word it moves one word backward
             if (currentLetter && currentWord) {
-                // This if block is for inside a word
                 if (currentLetter !== currentWord.firstChild) {
                     removeClass(currentLetter, "current");
+
                     const previousLetter = currentLetter.previousElementSibling;
+
                     addClass(previousLetter, "current");
                     removeClass(previousLetter, "correct");
                     removeClass(previousLetter, "incorrect");
+                } else if (currentWord.previousElementSibling) {
+                    // This code blocks moves cursor and position to the last chracter of the previous word
+                    removeClass(currentLetter, "current");
+                    removeClass(currentWord, "current");
+
+                    const previousWord = currentWord.previousElementSibling;
+                    addClass(previousWord, "current");
                 }
+            } else if (!currentLetter && currentWord) {
+                // this is to check if we are at the end of a word ( space position)
+                const lastLetter = currentWord.lastElementChild;
+
+                addClass(lastLetter, "current");
+                removeClass(lastLetter, "correct");
+                removeClass(lastLetter, "incorrect");
             }
         }
         console.log(key);
