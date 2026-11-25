@@ -247,14 +247,25 @@ function typingcheck() {
                     let currentEl = previousLetter;
 
                     while (currentEl) {
-                        console.log("blah");
-                        console.log(currentEl);
                         removeClass(currentEl, "current");
                         addClass(currentEl, "current");
                         removeClass(currentEl, "correct");
                         removeClass(currentEl, "incorrect");
                         currentEl = currentEl.previousElementSibling;
                     }
+                }
+            } else if (!currentLetter && currentWord) {
+                // It takes care of Ctrl-Backspace when the cursor(or current word has no current letter left that is it si in the last of the word)
+                // It jumps in front of the  current word  from the last when pressed  ctrl backspace
+                const lastLetter = currentWord.lastElementChild;
+                addClass(lastLetter, "current");
+                let currentEl = lastLetter;
+                while (currentEl) {
+                    removeClass(currentEl, "currentEl");
+                    addClass(currentEl, "current");
+                    removeClass(currentEl, "correct");
+                    removeClass(currentEl, "incorrect");
+                    currentEl = currentEl.previousElementSibling;
                 }
             }
         }
