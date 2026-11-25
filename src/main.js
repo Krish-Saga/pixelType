@@ -65,6 +65,13 @@ function modeChanger() {
     // This make sures that page is listening when clicking directly on time as default
     modeValue();
 }
+function textareaMove() {
+    const currentWord = document.querySelector(".word.current");
+    wordinput.style.width = currentWord.offsetWidth + "px";
+    wordinput.style.height = currentWord.offsetHeight + "px";
+    wordinput.style.top = currentWord.offsetTop + "px";
+    wordinput.style.left = currentWord.offsetLeft + "px";
+}
 
 function moveCursor() {
     const nextLetter = document.querySelector(".letter.current");
@@ -80,6 +87,9 @@ function moveCursor() {
         newposition[nextLetter ? "left" : "right"] -
         cursor.offsetWidth / 2 +
         "px";
+
+    // cursor.style.top = nextLetter.offsetTop + "px";
+    // cursor.style.left = nextLetter.offsetLeft + "px";
 }
 
 // function moveWindow() {
@@ -152,6 +162,7 @@ async function processingWords() {
     typemode(false);
     //==========================================
     requestAnimationFrame(moveCursor);
+    textareaMove();
 }
 function typemode(toggle) {
     if (activeMode == "timemode") {
@@ -163,24 +174,11 @@ function typemode(toggle) {
 }
 function typingcheck() {
     wordinput.addEventListener("input", (ev) => {
-        console.log(ev);
-    });
-    typingMain.addEventListener("keydown", (ev) => {
         typemode(true);
-        const key = ev.key;
+        const key = ev.data;
         const currentLetter = document.querySelector(".letter.current");
-        const expected = currentLetter?.innerHTML || " ";
-        const currentWord = document.querySelector(".word.current");
-        const isLetter = key.length === 1 && key !== " ";
-        const isSpace = key === " ";
-        const isTab = key === "Tab";
-        const isBackspace = key === "Backspace";
-        console.log({ key, expected });
-        if (isTab) {
-            ev.preventDefault();
-            processingWords();
-        }
-        if (isLetter) {
+        const expected = currentLetter.getAttribute("data-char");
+        if (ev.inputType === "insertText") {
             if (currentLetter) {
                 addClass(
                     currentLetter,
@@ -190,59 +188,90 @@ function typingcheck() {
                 if (currentLetter.nextSibling) {
                     addClass(currentLetter.nextSibling, "current");
                 }
-            } else {
-                const incorrectLetter = document.createElement("span");
-                incorrectLetter.innerHTML = key;
-                incorrectLetter.className = "letter incorrect extra ";
-                currentWord.appendChild(incorrectLetter);
             }
+        } else if (ev.inputType === "deleteContentBackward") {
+            console.log("all good");
         }
-        if (isSpace) {
-            if (expected !== " ") {
-                const lettersInvalidate = [
-                    ...document.querySelectorAll(
-                        ".word.current .letter:not(.correct)",
-                    ),
-                ];
-                lettersInvalidate.forEach((letter) => {
-                    addClass(letter, "incorrect");
-                });
-            }
-            removeClass(currentWord, "current");
-            addClass(currentWord.nextSibling, "current");
-            if (currentLetter) {
-                removeClass(currentLetter, "current");
-            }
-            addClass(currentWord.nextSibling.firstChild, "current");
-        }
-
-        if (isBackspace) {
-            // making last word current
-            if (currentLetter && currentWord.firstChild == currentLetter) {
-                removeClass(currentWord, "current");
-                addClass(currentWord.previousSibling, "current");
-                removeClass(currentLetter, "current");
-                addClass(currentWord.previousSibling.lastChild, "current");
-                removeClass(currentWord.previousSibling.lastChild, "incorrect");
-                removeClass(currentWord.previousSibling.lastChild, "correct");
-            }
-            if (currentLetter && currentWord.firstChild != currentLetter) {
-                removeClass(currentLetter, "current");
-                addClass(currentLetter.previousSibling, "current");
-                removeClass(currentLetter.previousSibling, "correct");
-                removeClass(currentLetter.previousSibling, "incorrect");
-            }
-            if (!currentLetter) {
-                addClass(currentWord.lastChild, "current");
-                removeClass(currentWord.lastChild, "incorrect");
-                removeClass(currentWord.lastChild, "correct");
-            }
-        }
-        // Moving window here
-        // moveWindow();
-        // Moving cursor yayyyyyyyyyyyyyyyy
-        moveCursor();
+        console.log(key);
+        console.log(expected);
+        console.log(ev.inputType);
     });
+    // typingMain.addEventListener("keydown", (ev) => {
+    //     const currentLetter = document.querySelector(".letter.current");
+    //     const expected = currentLetter?.innerHTML || " ";
+    //     const currentWord = document.querySelector(".word.current");
+    //     const isLetter = key.length === 1 && key !== " ";
+    //     const isSpace = key === " ";
+    //     const isTab = key === "Tab";
+    //     const isBackspace = key === "Backspace";
+    //     console.log({ key, expected });
+    //     if (isTab) {
+    //         ev.preventDefault();
+    //         processingWords();
+    //     }
+    //     if (isLetter) {
+    //         if (currentLetter) {
+    //             addClass(
+    //                 currentLetter,
+    //                 key === expected ? "correct" : "incorrect",
+    //             );
+    //             removeClass(currentLetter, "current");
+    //             if (currentLetter.nextSibling) {
+    //                 addClass(currentLetter.nextSibling, "current");
+    //             }
+    //         } else {
+    //             const incorrectLetter = document.createElement("span");
+    //             incorrectLetter.innerHTML = key;
+    //             incorrectLetter.className = "letter incorrect extra ";
+    //             currentWord.appendChild(incorrectLetter);
+    //         }
+    //     }
+    //     if (isSpace) {
+    //         if (expected !== " ") {
+    //             const lettersInvalidate = [
+    //                 ...document.querySelectorAll(
+    //                     ".word.current .letter:not(.correct)",
+    //                 ),
+    //             ];
+    //             lettersInvalidate.forEach((letter) => {
+    //                 addClass(letter, "incorrect");
+    //             });
+    //         }
+    //         removeClass(currentWord, "current");
+    //         addClass(currentWord.nextSibling, "current");
+    //         if (currentLetter) {
+    //             removeClass(currentLetter, "current");
+    //         }
+    //         addClass(currentWord.nextSibling.firstChild, "current");
+    //     }
+    //
+    //     if (isBackspace) {
+    //         // making last word current
+    //         if (currentLetter && currentWord.firstChild == currentLetter) {
+    //             removeClass(currentWord, "current");
+    //             addClass(currentWord.previousSibling, "current");
+    //             removeClass(currentLetter, "current");
+    //             addClass(currentWord.previousSibling.lastChild, "current");
+    //             removeClass(currentWord.previousSibling.lastChild, "incorrect");
+    //             removeClass(currentWord.previousSibling.lastChild, "correct");
+    //         }
+    //         if (currentLetter && currentWord.firstChild != currentLetter) {
+    //             removeClass(currentLetter, "current");
+    //             addClass(currentLetter.previousSibling, "current");
+    //             removeClass(currentLetter.previousSibling, "correct");
+    //             removeClass(currentLetter.previousSibling, "incorrect");
+    //         }
+    //         if (!currentLetter) {
+    //             addClass(currentWord.lastChild, "current");
+    //             removeClass(currentWord.lastChild, "incorrect");
+    //             removeClass(currentWord.lastChild, "correct");
+    //         }
+    //     }
+    //     // Moving window here
+    //     // moveWindow();
+    //     // Moving cursor yayyyyyyyyyyyyyyyy
+    //     moveCursor();
+    // });
 }
 
 async function main() {
