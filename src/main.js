@@ -1,11 +1,11 @@
 import english from "./assets/english.json";
 const typingMain = document.getElementById("typing-main");
+let previousTop = null;
 const cursor = document.getElementById("cursor");
 const wordinput = document.getElementById("type");
 const words = document.getElementById("words");
 const engwords = english.words;
 let wordsOffset = 0;
-let previousTop = null;
 let Imgindex = 0;
 let wordlength = 100;
 let activeMode = "timemode";
@@ -88,37 +88,29 @@ function moveCursor() {
         newposition[nextLetter ? "left" : "right"] -
         cursor.offsetWidth / 2 +
         "px";
-
-    // cursor.style.top = nextLetter.offsetTop + "px";
-    // cursor.style.left = nextLetter.offsetLeft + "px";
 }
 
-// function moveWindow() {
-//     const current =
-//         document.querySelector(".letter.current") ||
-//         document.querySelector(".word.current");
-//     if (!current) return;
-//     const typingMainRect = typingMain.getBoundingClientRect();
-//     const currentRect = current.getBoundingClientRect();
-//     const currentTop = current.getBoundingClientRect().top;
-//     const lineHeight = parseFloat(getComputedStyle(current).lineHeight);
-//     console.log(currentTop);
-//     const center =
-//         typingMainRect.top + (typingMainRect.height - lineHeight) / 2;
-//     console.log(wordsOffset);
-//     if (
-//         previousTop !== null &&
-//         currentTop > previousTop &&
-//         currentTop > center
-//     ) {
-//         const difference = center - currentRect.top;
-//         wordsOffset += difference;
-//         words.style.transform = `translateY(${wordsOffset}px)`;
-//         moveCursor();
-//     }
-//
-//     previousTop = currentTop;
-// }
+function moveWindow() {
+    const currentWord = document.querySelector(".word.current");
+    if (!currentWord) return;
+
+    const lineHeight = parseFloat(getComputedStyle(currentWord).lineHeight);
+
+    // Target position: second line
+    const targetPosition = lineHeight;
+
+    // Original layout position (not affected by transform)
+    const wordPosition = currentWord.offsetTop;
+
+    // Never move the original first line down into the middle.
+    const newOffset = Math.min(0, targetPosition - wordPosition);
+
+    wordsOffset = newOffset;
+
+    words.style.transform = `translateY(${wordsOffset}px)`;
+
+    moveCursor();
+}
 
 function addClass(el, classname) {
     el.classList.add(classname);
@@ -155,6 +147,8 @@ function imgtoggle() {
 }
 
 async function processingWords() {
+    wordsOffset = 0;
+    words.style.transform = "translateY(0px)";
     randWords(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
@@ -182,7 +176,6 @@ function typingcheck() {
         const currentLetter = document.querySelector(".letter.current");
         const currentWord = document.querySelector(".word.current");
         const expected = currentLetter?.getAttribute("data-char") || " ";
-        const wordindex = currentWord.getAttribute("data-wordindex");
         if (ev.inputType === "insertText") {
             if (currentLetter) {
                 addClass(
@@ -201,35 +194,21 @@ function typingcheck() {
                 addClass(currentWord.nextSibling, "current");
             }
         } else if (ev.inputType === "deleteContentBackward") {
-            if (
-                currentLetter &&
-                currentWord.firstChild == currentLetter &&
-                currentWord.wordindex !== 1
-            ) {
-                removeClass(currentWord, "current");
-                addClass(currentWord.previousSibling, "current");
-                removeClass(currentLetter, "current");
-                addClass(currentWord.previousSibling.lastChild, "current");
-                removeClass(currentWord.previousSibling.lastChild, "incorrect");
-                removeClass(currentWord.previousSibling.lastChild, "correct");
-            }
-            // making last word current
-            if (currentLetter && currentWord.firstChild != currentLetter) {
-                removeClass(currentLetter, "current");
-                addClass(currentLetter.previousSibling, "current");
-                removeClass(currentLetter.previousSibling, "correct");
-                removeClass(currentLetter.previousSibling, "incorrect");
-            }
-            if (!currentLetter) {
-                addClass(currentWord.lastChild, "current");
-                removeClass(currentWord.lastChild, "incorrect");
-                removeClass(currentWord.lastChild, "correct");
+            if (currentLetter && currentWord) {
+                // This if block is for inside a word
+                if (currentLetter !== currentWord.firstChild) {
+                    removeClass(currentLetter, "current");
+                    const previousLetter = currentLetter.previousElementSibling;
+                    addClass(previousLetter, "current");
+                    removeClass(previousLetter, "correct");
+                    removeClass(previousLetter, "incorrect");
+                }
             }
         }
         console.log(key);
         console.log(expected);
         console.log(ev.inputType);
-        moveCursor();
+        moveWindow();
         textareaMove();
     });
     // typingMain.addEventListener("keydown", (ev) => {

@@ -148,7 +148,7 @@ main {
     border-radius: 8px;
     outline: 0;
     margin-top: 2rem;
-    width: 80vw;
+    width: 90vw;
     height: 175px;
     display: block;
     overflow: hidden;
@@ -160,7 +160,6 @@ main {
     font-family: "DivineDeparture";
     width: 100%;
     position: relative;
-    transition: transform 0.15s ease;
 }
 #type {
     pointer-events: none;
@@ -197,10 +196,10 @@ main {
     filter: brightness(90%);
 }
 #cursor {
-    height: 1.3em;
+    height: 1.4em;
     font-family: "DivineDeparture";
     border-radius: 12px;
-    width: 3px;
+    width: 4px;
     background: var(--frost);
     position: fixed;
     animation: blink 1s infinite;
