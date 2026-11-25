@@ -183,15 +183,17 @@ function typingcheck() {
                     key === expected ? "correct" : "incorrect",
                 );
                 removeClass(currentLetter, "current");
-                if (currentLetter.nextSibling) {
-                    addClass(currentLetter.nextSibling, "current");
+                if (currentLetter.nextElementSibling) {
+                    addClass(currentLetter.nextElementSibling, "current");
                 }
             } else if (expected === " ") {
-                console.log("gettgin her");
                 removeClass(currentWord, "current");
-                removeClass(currentWord.lastChild, "current");
-                addClass(currentWord.nextSibling.firstChild, "current");
-                addClass(currentWord.nextSibling, "current");
+                removeClass(currentWord.lastElementChild, "current");
+                addClass(
+                    currentWord.nextElementSibling.firstElementChild,
+                    "current",
+                );
+                addClass(currentWord.nextElementSibling, "current");
             }
         } else if (ev.inputType === "deleteContentBackward") {
             // This if block is for inside a word it moves one word backward
@@ -219,6 +221,16 @@ function typingcheck() {
                 addClass(lastLetter, "current");
                 removeClass(lastLetter, "correct");
                 removeClass(lastLetter, "incorrect");
+            }
+        } else if (ev.inputType === "deleteWordBackward") {
+            if (currentLetter && currentWord) {
+                if (currentLetter !== currentWord.firstChild) {
+                    removeClass(currentLetter, "current");
+                    const firstWordLetter = currentWord.firstElementChild;
+                    addClass(firstWordLetter, "current");
+                    removeClass(firstWordLetter, "correct");
+                    removeClass(firstWordLetter, "incorrect");
+                }
             }
         }
         console.log(key);
