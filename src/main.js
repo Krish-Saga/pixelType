@@ -1,5 +1,6 @@
 import english from "./assets/english.json";
 const typingMain = document.getElementById("typing-main");
+const cursor = document.getElementById("cursor");
 const wordinput = document.getElementById("type");
 const words = document.getElementById("words");
 const engwords = english.words;
@@ -67,16 +68,16 @@ function modeChanger() {
 }
 function textareaMove() {
     const currentWord = document.querySelector(".word.current");
-    wordinput.style.width = currentWord.offsetWidth + "px";
-    wordinput.style.height = currentWord.offsetHeight + "px";
-    wordinput.style.top = currentWord.offsetTop + "px";
-    wordinput.style.left = currentWord.offsetLeft + "px";
+    const rect = currentWord.getBoundingClientRect();
+    wordinput.style.width = rect.width + "px";
+    wordinput.style.height = rect.height + "px";
+    wordinput.style.top = rect.top + "px";
+    wordinput.style.left = rect.left + "px";
 }
 
 function moveCursor() {
     const nextLetter = document.querySelector(".letter.current");
     const wordEnd = document.querySelector(".word.current");
-    const cursor = document.getElementById("cursor");
     const newposition = (nextLetter || wordEnd).getBoundingClientRect();
     cursor.style.top =
         newposition.top +
@@ -154,12 +155,12 @@ function imgtoggle() {
 }
 
 async function processingWords() {
+    randWords(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
     wordinput.focus();
     // Don't touch this first calculates font to place cursor in it's place
     await document.fonts.ready;
-    typemode(false);
     //==========================================
     requestAnimationFrame(moveCursor);
     textareaMove();
@@ -169,7 +170,9 @@ function typemode(toggle) {
         timer.style.opacity = (+toggle).toString();
     }
     modeNumbers.style.opacity = (+!toggle).toString();
+    cursor;
     nav.style.opacity = (+!toggle).toString();
+    cursor.style.animation = "none";
     modediv.style.opacity = (+!toggle).toString();
 }
 function typingcheck() {
@@ -177,7 +180,9 @@ function typingcheck() {
         typemode(true);
         const key = ev.data;
         const currentLetter = document.querySelector(".letter.current");
-        const expected = currentLetter.getAttribute("data-char");
+        const currentWord = document.querySelector(".word.current");
+        const expected = currentLetter?.getAttribute("data-char") || " ";
+        const wordindex = currentWord.getAttribute("data-wordindex");
         if (ev.inputType === "insertText") {
             if (currentLetter) {
                 addClass(
@@ -188,13 +193,44 @@ function typingcheck() {
                 if (currentLetter.nextSibling) {
                     addClass(currentLetter.nextSibling, "current");
                 }
+            } else if (expected === " ") {
+                console.log("gettgin her");
+                removeClass(currentWord, "current");
+                removeClass(currentWord.lastChild, "current");
+                addClass(currentWord.nextSibling.firstChild, "current");
+                addClass(currentWord.nextSibling, "current");
             }
         } else if (ev.inputType === "deleteContentBackward") {
-            console.log("all good");
+            if (
+                currentLetter &&
+                currentWord.firstChild == currentLetter &&
+                currentWord.wordindex !== 1
+            ) {
+                removeClass(currentWord, "current");
+                addClass(currentWord.previousSibling, "current");
+                removeClass(currentLetter, "current");
+                addClass(currentWord.previousSibling.lastChild, "current");
+                removeClass(currentWord.previousSibling.lastChild, "incorrect");
+                removeClass(currentWord.previousSibling.lastChild, "correct");
+            }
+            // making last word current
+            if (currentLetter && currentWord.firstChild != currentLetter) {
+                removeClass(currentLetter, "current");
+                addClass(currentLetter.previousSibling, "current");
+                removeClass(currentLetter.previousSibling, "correct");
+                removeClass(currentLetter.previousSibling, "incorrect");
+            }
+            if (!currentLetter) {
+                addClass(currentWord.lastChild, "current");
+                removeClass(currentWord.lastChild, "incorrect");
+                removeClass(currentWord.lastChild, "correct");
+            }
         }
         console.log(key);
         console.log(expected);
         console.log(ev.inputType);
+        moveCursor();
+        textareaMove();
     });
     // typingMain.addEventListener("keydown", (ev) => {
     //     const currentLetter = document.querySelector(".letter.current");
@@ -246,26 +282,6 @@ function typingcheck() {
     //     }
     //
     //     if (isBackspace) {
-    //         // making last word current
-    //         if (currentLetter && currentWord.firstChild == currentLetter) {
-    //             removeClass(currentWord, "current");
-    //             addClass(currentWord.previousSibling, "current");
-    //             removeClass(currentLetter, "current");
-    //             addClass(currentWord.previousSibling.lastChild, "current");
-    //             removeClass(currentWord.previousSibling.lastChild, "incorrect");
-    //             removeClass(currentWord.previousSibling.lastChild, "correct");
-    //         }
-    //         if (currentLetter && currentWord.firstChild != currentLetter) {
-    //             removeClass(currentLetter, "current");
-    //             addClass(currentLetter.previousSibling, "current");
-    //             removeClass(currentLetter.previousSibling, "correct");
-    //             removeClass(currentLetter.previousSibling, "incorrect");
-    //         }
-    //         if (!currentLetter) {
-    //             addClass(currentWord.lastChild, "current");
-    //             removeClass(currentWord.lastChild, "incorrect");
-    //             removeClass(currentWord.lastChild, "correct");
-    //         }
     //     }
     //     // Moving window here
     //     // moveWindow();
@@ -277,8 +293,8 @@ function typingcheck() {
 async function main() {
     document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`; // Sets Background Image
     document.getElementById("imgtoggle").addEventListener("click", imgtoggle); // Makes the image button active
-    randWords(wordlength);
     processingWords();
+    textareaMove();
     moveCursor();
     typingcheck();
     modeChanger(); // It runs event listener for modes

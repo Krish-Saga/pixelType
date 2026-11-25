@@ -151,8 +151,7 @@ main {
     width: 80vw;
     height: 175px;
     display: block;
-    /* overflow: hidden; */
-    overflow: scroll;
+    overflow: hidden;
     position: relative;
     border: 2px solid black;
 }
@@ -166,7 +165,7 @@ main {
 #type {
     pointer-events: none;
     position: fixed;
-    opacity: 1;
+    opacity: 0;
     background: none;
     resize: none;
     outline: none;
@@ -198,11 +197,11 @@ main {
     filter: brightness(90%);
 }
 #cursor {
-    height: 1.2em;
+    height: 1.3em;
     font-family: "DivineDeparture";
     border-radius: 12px;
     width: 3px;
     background: var(--frost);
-    position: absolute;
+    position: fixed;
     animation: blink 1s infinite;
 }
