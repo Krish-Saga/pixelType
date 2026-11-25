@@ -169,6 +169,13 @@ function typemode(toggle) {
     cursor.style.animation = "none";
     modediv.style.opacity = (+!toggle).toString();
 }
+function extraIncorrectLetter(key) {
+    const currentWord = document.querySelector(".word.current");
+    const extraLetter = document.createElement("span");
+    extraLetter.textContent = key;
+    extraLetter.classList.add("extra", "incorrect", "letter");
+    currentWord.appendChild(extraLetter);
+}
 function typingcheck() {
     wordinput.focus();
     wordinput.addEventListener("keydown", (ev) => {
@@ -187,7 +194,7 @@ function typingcheck() {
         const currentWord = document.querySelector(".word.current");
         const expected = currentLetter?.getAttribute("data-char") || " ";
         if (ev.inputType === "insertText") {
-            if (currentLetter) {
+            if (currentLetter && currentWord) {
                 addClass(
                     currentLetter,
                     key === expected ? "correct" : "incorrect",
@@ -196,14 +203,17 @@ function typingcheck() {
                 if (currentLetter.nextElementSibling) {
                     addClass(currentLetter.nextElementSibling, "current");
                 }
-            } else if (expected === " ") {
-                removeClass(currentWord, "current");
-                removeClass(currentWord.lastElementChild, "current");
-                addClass(
-                    currentWord.nextElementSibling.firstElementChild,
-                    "current",
-                );
-                addClass(currentWord.nextElementSibling, "current");
+            } else if (!currentLetter && currentWord) {
+                if (key === expected) {
+                    removeClass(currentWord, "current");
+                    addClass(
+                        currentWord.nextElementSibling.firstElementChild,
+                        "current",
+                    );
+                    addClass(currentWord.nextElementSibling, "current");
+                } else if (key !== expected) {
+                    extraIncorrectLetter(key);
+                }
             }
         } else if (ev.inputType === "deleteContentBackward") {
             // This if block is for inside a word it moves one word backward
@@ -247,8 +257,9 @@ function typingcheck() {
                     addClass(finalWord, "current");
                     removeClass(currentLetter, "current");
                 } else if (currentWord.previousElementSibling) {
-                    // From first if code block it confirms that this is the firstletter of element word and running this code
-                    // This code blocks moves cursor and position to the first character of the previousWord
+                    // This function triggers if the cursor is at the front of the word that is current letter is first element of the current word then it triggers on Ctrl-Backspace
+                    // This code blocks moves cursor and position to the first character of the previousWord (IT is buggy and stops working sometimes)
+                    console.log("I'm tirregering");
                     const previousWord = currentWord.previousElementSibling;
                     const previousLetter = previousWord.lastElementChild;
                     const finalWord = previousWord.firstElementChild;
@@ -267,6 +278,7 @@ function typingcheck() {
                     removeClass(previousLetter, "current");
                     addClass(finalWord, "current");
                 }
+                console.log("getting here");
             } else if (!currentLetter && currentWord) {
                 // It takes care of Ctrl-Backspace when the cursor(or current word has no current letter left that is it si in the last of the word)
                 // It jumps in front of the  current word  from the last when pressed  ctrl backspace
@@ -284,6 +296,8 @@ function typingcheck() {
             }
         }
         moveWindow();
+        console.log(wordinput.value);
+        console.log(ev.inputType);
     });
 }
 
