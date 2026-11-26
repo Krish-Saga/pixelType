@@ -20,7 +20,7 @@
 #timer {
     opacity: 0;
     font-size: 3.5rem;
-    margin: 1rem;
+    position: absolute;
 }
 #info {
     font-size: 1rem;
@@ -30,14 +30,12 @@
     display: flex;
     align-items: center;
     gap: 5rem;
-    justify-content: space-evenly;
-}
-#modeNumbers > span,
-#modes > span {
-    padding: 2px 5px;
+    justify-content: center;
+    font-weight: 600;
 }
 .active {
-    color: var(--storm);
+    color: var(--ink);
+    font-weight: 800;
 }
 
 /* #modeNumbers > span:active, */
@@ -46,8 +44,11 @@
 
 #modeNumbers,
 #modes {
-    backdrop-filter: brightness(80%);
-    padding: 1rem;
+    background-color: var(--rain);
+    border-radius: 4px;
+    backdrop-filter: brightness(20%);
+    color: var(--storm);
+    padding: 0.5rem;
     display: flex;
     gap: 2rem;
     border: 2px solid var(--sage);

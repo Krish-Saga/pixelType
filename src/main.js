@@ -15,17 +15,11 @@ const modediv = document.getElementById("modes");
 const nav = document.querySelector("nav");
 
 function modeValue() {
-    const modeSpans = document.querySelectorAll("#modeNumbers > span");
-    modeSpans.forEach((mode) => {
-        mode.addEventListener("click", () => {
-            if (activeMode == "timemode") {
-                timer.textContent = mode.textContent;
-            } else if (activeMode == "wordmode") {
-                addClass(modeSpans, "active");
-                wordlength = mode.textContent;
-                processingWords();
-            }
-            typingMain.focus();
+    const numberSpans = document.querySelectorAll("#modeNumbers > span");
+    numberSpans.forEach((span) => {
+        span.addEventListener("click", () => {
+            numberSpans.forEach((s) => s.classList.remove("active"));
+            span.classList.add("active");
         });
     });
 }
@@ -33,10 +27,12 @@ function modeValue() {
 function modeChanger() {
     modes.forEach((mod) => {
         mod.addEventListener("click", () => {
-            activeMode = mod.textContent + "mode";
+            modes.forEach((m) => m.classList.remove("active"));
+            mod.classList.add("active");
+            activeMode = mod.id;
             if (activeMode == "timemode") {
                 modeNumbers.innerHTML = `
-					<span>15</span>
+					<span class="active">15</span>
 					<span>30</span>
 					<span>60</span>
 					<span>120</span>
@@ -44,7 +40,7 @@ function modeChanger() {
         `;
             } else if (activeMode == "wordmode") {
                 modeNumbers.innerHTML = `
-					<span>10</span>
+					<span class="active">10</span>
 					<span>25</span>
 					<span>50</span>
 					<span>100</span>
@@ -52,7 +48,7 @@ function modeChanger() {
             } else if (activeMode == "quotemode") {
                 modeNumbers.innerHTML = `
 
-					<span>all</span>
+					<span class="active">all</span>
 					<span>meme</span>
 					<span>short</span>
 					<span>long</span>
