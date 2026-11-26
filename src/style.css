@@ -23,10 +23,10 @@
     margin: 1rem;
 }
 #info {
-    font-size: 1.4rem;
+    font-size: 1rem;
     color: var(--frost);
     position: relative;
-    margin-top: 2rem;
+    margin-top: 4rem;
     display: flex;
     align-items: center;
     gap: 5rem;
@@ -34,22 +34,20 @@
 }
 #modeNumbers > span,
 #modes > span {
-    border: 2px solid var(--lavender);
-    background-color: var(--storm);
-    padding: 3px 10px;
-    border-radius: 12px;
+    padding: 2px 5px;
+}
+.active {
+    color: var(--storm);
 }
 
-#modeNumbers > span:active,
-#modes > span:active {
-    transform: scale(0.9);
-}
+/* #modeNumbers > span:active, */
+/* #modes > span:active { */
+/* } */
 
 #modeNumbers,
 #modes {
     backdrop-filter: brightness(80%);
     padding: 1rem;
-    border-radius: 10px;
     display: flex;
     gap: 2rem;
     border: 2px solid var(--sage);
@@ -161,7 +159,7 @@ main {
     border: 2px solid black;
 }
 #words {
-    font-weight: 600;
+    font-weight: 800;
     font-family: "DivineDeparture";
     width: 100%;
     position: relative;
@@ -178,9 +176,14 @@ main {
 .word {
     margin: 0 11px;
     display: inline-block;
-    line-height: 1.6;
-    font-size: 2.3rem;
+    line-height: 1.5;
+    text-align: justify;
+    font-size: 2.4rem;
     color: var(--ink);
+}
+.wrongUnderline {
+    text-decoration: underline;
+    text-decoration-color: red;
 }
 @keyframes blink {
     0% {

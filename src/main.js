@@ -21,6 +21,7 @@ function modeValue() {
             if (activeMode == "timemode") {
                 timer.textContent = mode.textContent;
             } else if (activeMode == "wordmode") {
+                addClass(modeSpans, "active");
                 wordlength = mode.textContent;
                 processingWords();
             }
@@ -189,7 +190,6 @@ function typingcheck() {
     });
     wordinput.addEventListener("beforeinput", (ev) => {
         ev.preventDefault();
-        typemode(true);
         const key = ev.data;
         const currentLetter = document.querySelector(".letter.current");
         const currentWord = document.querySelector(".word.current");
@@ -198,13 +198,33 @@ function typingcheck() {
         const expected = currentLetter?.getAttribute("data-char") || " ";
         if (ev.inputType === "insertText") {
             if (currentLetter && currentWord) {
-                addClass(
-                    currentLetter,
-                    key === expected ? "correct" : "incorrect",
-                );
-                removeClass(currentLetter, "current");
-                if (currentLetter.nextElementSibling) {
-                    addClass(currentLetter.nextElementSibling, "current");
+                if (
+                    currentWord.firstElementChild === currentLetter &&
+                    key === " "
+                ) {
+                    return;
+                }
+                if (
+                    currentLetter !== currentWord.firstElementChild &&
+                    key === " "
+                ) {
+                    const nextWord = currentWord.nextElementSibling;
+                    const nextLetter = nextWord.firstElementChild;
+                    addClass(nextLetter, "current");
+                    addClass(nextWord, "current");
+                    addClass(currentWord, "wrongUnderline");
+                    removeClass(currentWord, "current");
+                    removeClass(currentLetter, "current");
+                } else {
+                    typemode(true);
+                    addClass(
+                        currentLetter,
+                        key === expected ? "correct" : "incorrect",
+                    );
+                    removeClass(currentLetter, "current");
+                    if (currentLetter.nextElementSibling) {
+                        addClass(currentLetter.nextElementSibling, "current");
+                    }
                 }
             } else if (
                 !currentLetter &&
