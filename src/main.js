@@ -7,7 +7,10 @@ const engwords = english.words;
 let wordsOffset = 0;
 let Imgindex = 0;
 let wordlength = 100;
-let activeMode = "timemode";
+let activeMode = document.querySelector("#modes .active").id;
+let activeModeValue = document
+    .querySelector("#modeNumbers .active")
+    .textContent.trim();
 const modeNumbers = document.getElementById("modeNumbers");
 const modes = document.querySelectorAll("#modes >span");
 const timer = document.getElementById("timer");
@@ -20,6 +23,9 @@ function modeValue() {
         span.addEventListener("click", () => {
             numberSpans.forEach((s) => s.classList.remove("active"));
             span.classList.add("active");
+            activeModeValue = span.textContent.trim();
+            processingWords();
+            wordinput.focus();
         });
     });
 }
@@ -54,9 +60,13 @@ function modeChanger() {
 					<span>long</span>
         `;
             }
+            activeModeValue = document
+                .querySelector("#modeNumbers .active")
+                .textContent.trim();
             // This reloads and changes the value of the modeNumbers after selecting mode
             modeValue();
-            typingMain.focus();
+            processingWords();
+            wordinput.focus();
         });
     });
     // This make sures that page is listening when clicking directly on time as default
@@ -105,7 +115,7 @@ function moveWindow() {
 
     words.style.transform = `translateY(${wordsOffset}px)`;
 
-    moveCursor();
+    requestAnimationFrame(moveCursor);
     textareaMove();
 }
 
@@ -144,8 +154,11 @@ function imgtoggle() {
 }
 
 async function processingWords() {
-    wordsOffset = 0;
-    words.style.transform = "translateY(0px)";
+    if (activeMode == "timemode") {
+        wordlength = Math.ceil(Number(activeModeValue) * 3.5);
+    } else if (activeMode == "wordmode") {
+        wordlength = Number(activeModeValue);
+    }
     randWords(wordlength);
     addClass(document.querySelector(".word"), "current");
     addClass(document.querySelector(".letter"), "current");
@@ -159,6 +172,8 @@ async function processingWords() {
 function typemode(toggle) {
     if (activeMode == "timemode") {
         timer.style.opacity = (+toggle).toString();
+    } else if ((activeMode = "wordmode")) {
+        console.log("working");
     }
     modeNumbers.style.opacity = (+!toggle).toString();
     cursor;
@@ -202,7 +217,8 @@ function typingcheck() {
                 }
                 if (
                     currentLetter !== currentWord.firstElementChild &&
-                    key === " "
+                    key === " " &&
+                    currentWord !== wordswrapper.lastElementChild
                 ) {
                     const nextWord = currentWord.nextElementSibling;
                     const nextLetter = nextWord.firstElementChild;
@@ -330,8 +346,7 @@ async function main() {
     document.body.style.backgroundImage = `url('${import.meta.env.BASE_URL}assets/back5.jpg')`; // Sets Background Image
     document.getElementById("imgtoggle").addEventListener("click", imgtoggle); // Makes the image button active
     processingWords();
-    textareaMove();
-    moveCursor();
+    moveWindow();
     modeChanger(); // It runs event listener for modes
     typingMain.addEventListener("click", () => {
         wordinput.focus();
