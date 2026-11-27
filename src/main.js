@@ -13,7 +13,6 @@ let activeModeValue = document
     .textContent.trim();
 const modeNumbers = document.getElementById("modeNumbers");
 const modes = document.querySelectorAll("#modes >span");
-const timer = document.getElementById("timer");
 const modediv = document.getElementById("modes");
 const nav = document.querySelector("nav");
 
@@ -118,6 +117,20 @@ function moveWindow() {
     requestAnimationFrame(moveCursor);
     textareaMove();
 }
+function timer(activemodeValue) {
+    const info = document.getElementById("info");
+    const timer = document.createElement("span");
+    let timeLeft = activemodeValue;
+    timer.classList.add("timer");
+    info.appendChild(timer);
+    setInterval(() => {
+        timeLeft--;
+        timer.textContent = timeLeft;
+        if (timeLeft <= 0) {
+            console.log("timer worked as planned");
+        }
+    }, 1000);
+}
 
 function addClass(el, classname) {
     el.classList.add(classname);
@@ -136,14 +149,14 @@ function randWords(wordlength) {
 
     words.innerHTML = unindexedWord
         .map((word, index) => {
-            return `<div class="word" data-wordindex="${index + 1}"  >${word}</div>`;
+            return `<div class="word" data-ui-state="untyped" data-wordindex="${index + 1}"  >${word}</div>`;
         })
         .join("");
     document.querySelectorAll(".word").forEach((div) => {
         div.innerHTML = div.textContent
             .split("")
             .map((letters, index) => {
-                return `<span class="letter" data-letterindex="${index + 1}" data-char="${letters}">${letters}</span>`;
+                return `<span class="letter" data-letterindex="${index + 1}" data-ui-state="untyped"data-char="${letters}">${letters}</span>`;
             })
             .join("");
     });
@@ -171,7 +184,6 @@ async function processingWords() {
 }
 function typemode(toggle) {
     if (activeMode == "timemode") {
-        timer.style.opacity = (+toggle).toString();
     } else if ((activeMode = "wordmode")) {
         console.log("working");
     }
@@ -225,15 +237,20 @@ function typingcheck() {
                     addClass(nextLetter, "current");
                     addClass(nextWord, "current");
                     addClass(currentWord, "wrongUnderline");
+                    addClass(currentWord, "typedIncorrectly");
                     removeClass(currentWord, "current");
                     removeClass(currentLetter, "current");
                 } else {
                     typemode(true);
-                    addClass(
-                        currentLetter,
-                        key === expected ? "correct" : "incorrect",
-                    );
+                    if (key == expected) {
+                        addClass(currentLetter, "correct");
+                        currentLetter.dataset.uiState = "correct";
+                    } else {
+                        addClass(currentLetter, "incorrect");
+                        currentLetter.dataset.uiState = "incorrect";
+                    }
                     removeClass(currentLetter, "current");
+
                     if (currentLetter.nextElementSibling) {
                         addClass(currentLetter.nextElementSibling, "current");
                     }
@@ -272,6 +289,9 @@ function typingcheck() {
 
                     const previousWord = currentWord.previousElementSibling;
                     addClass(previousWord, "current");
+                    if (previousWord.classList.contains("wrongUnderline")) {
+                        removeClass(previousWord, "wrongUnderline");
+                    }
                 }
             } else if (!currentLetter && currentWord) {
                 // this is to check if we are at the end of a word ( space position)
@@ -310,6 +330,9 @@ function typingcheck() {
                     rmPreviousLetters.forEach((letter) => {
                         letter.classList.remove("correct", "incorrect");
                     });
+                    if (previousWord.classList.contains("wrongUnderline")) {
+                        removeClass(previousWord, "wrongUnderline");
+                    }
                     // This is to calculate extra letters input instead of expected space
                     const wrongWordCounts =
                         previousWord.querySelectorAll(":scope>.extra");
