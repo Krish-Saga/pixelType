@@ -179,7 +179,7 @@ async function processingWords() {
     // Don't touch this first calculates font to place cursor in it's place
     await document.fonts.ready;
     //==========================================
-    requestAnimationFrame(moveCursor);
+    moveWindow();
     textareaMove();
 }
 function typemode(toggle) {

@@ -174,7 +174,6 @@ main {
     overflow: hidden;
 }
 .word {
-    text-decoration: none;
     margin: 0 11px;
     display: inline-block;
     line-height: 1.8;
